@@ -1,8 +1,11 @@
 future~=0.18.2
-numpy~=1.20.2
+numpy~=1.19.5
 matplotlib~=3.4.1
 scipy~=1.6.3
 sklearn~=0.0
 scikit-learn~=0.24.2
 streamlit~=0.82.0
 pandas~=1.2.4
+tensorflow~=2.5.0
+ipython~=7.24.0
+gplearn~=0.4.1
