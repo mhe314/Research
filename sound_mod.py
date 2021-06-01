@@ -4,11 +4,7 @@ st.title('Sound Modification App')
 
 # Use to save images to google drive
 # note that you may need to change to your own path in google drive
-# or remove this part and run in yout local computer
-from google.colab import drive
-drive.mount('/content/drive')
-%cd '/content/drive/MyDrive/Colab/music_transfer'
-
+# or remove this part and run in your local computer
 import glob
 from IPython.display import Audio
 import matplotlib.pyplot as plt
@@ -16,17 +12,13 @@ import numpy as np
 import scipy.io
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 import torch.optim as optim
 from torch.optim.lr_scheduler import StepLR
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
-%matplotlib inline
 
 dataset_path = '/content/drive/MyDrive/Colab/music_transfer/dataset'
-% rm - rf
 '/content/drive/MyDrive/Colab/music_transfer/results-MDS'
-% mkdir
 '/content/drive/MyDrive/Colab/music_transfer/results-MDS'
 
 is_cuda = torch.cuda.is_available()
@@ -34,7 +26,7 @@ device = torch.device('cuda' if is_cuda else 'cpu')
 
 
 class MyDataset(Dataset):
-    '''Dataset for MDS method'''
+    """Dataset for MDS method"""
 
     def __init__(self, dataset_path, data_type):
         super(MyDataset, self).__init__()
@@ -57,7 +49,7 @@ class MyDataset(Dataset):
         self.feats_all_g_norm = self.normalize_g()
 
     def parse_guitar_list(self):
-        '''Parse guitar_list'''
+        """Parse guitar_list"""
         guitar_list = []
         for piano_path in self.piano_list:
             guitar_path = piano_path.replace('piano', 'guitar')
@@ -65,7 +57,7 @@ class MyDataset(Dataset):
         return guitar_list
 
     def merge_feats(self, mat_data):
-        '''merge 4 features into 1 feature'''
+        """merge 4 features into 1 feature"""
         freq = mat_data['omega'].reshape(1, -1)
         phi = mat_data['phi']
         a = mat_data['a']
@@ -74,7 +66,7 @@ class MyDataset(Dataset):
         return feats_all
 
     def wrap_data(self, file_list):
-        '''add all features into an array'''
+        """add all features into an array"""
         feats_all = np.zeros((len(self.piano_list), 4, 8))  # for each feats: 4*8 dimension
         for idx, file_path in enumerate(file_list):
             feats = self.merge_feats(scipy.io.loadmat(file_path))
@@ -82,7 +74,7 @@ class MyDataset(Dataset):
         return feats_all
 
     def parse_minmax_p(self):
-        '''parse minmax for piano data'''
+        """parse minmax for piano data"""
         # feats_all = self.feats_all_p
         # self.freq_max_p, self.freq_min_p = np.max(feats_all[:,0,:]), np.min(feats_all[:,0,:])
         # self.phi_max_p, self.phi_min_p = np.max(feats_all[:,1,:]), np.min(feats_all[:,1,:])
@@ -99,7 +91,7 @@ class MyDataset(Dataset):
         return None
 
     def parse_minmax_g(self):
-        '''parse minmax for guitar data'''
+        """parse minmax for guitar data"""
         # feats_all = self.feats_all_g
         # self.freq_max_g, self.freq_min_g = np.max(feats_all[:,0,:]), np.min(feats_all[:,0,:])
         # self.phi_max_g, self.phi_min_g = np.max(feats_all[:,1,:]), np.min(feats_all[:,1,:])
@@ -116,7 +108,7 @@ class MyDataset(Dataset):
         return None
 
     def normalize_p(self):
-        '''normalize piano data'''
+        """normalize piano data"""
         norm_all = np.zeros((len(self.piano_list), 4, 8))
         norm_all[:, 0, :] = (self.feats_all_p[:, 0, :] - self.freq_min_p) / (self.freq_max_p - self.freq_min_p)
         norm_all[:, 1, :] = (self.feats_all_p[:, 1, :] - self.phi_min_p) / (self.phi_max_p - self.phi_min_p)
@@ -125,7 +117,7 @@ class MyDataset(Dataset):
         return norm_all
 
     def normalize_g(self):
-        '''normalize guitar data'''
+        """normalize guitar data"""
         norm_all = np.zeros((len(self.piano_list), 4, 8))
         norm_all[:, 0, :] = (self.feats_all_g[:, 0, :] - self.freq_min_g) / (self.freq_max_g - self.freq_min_g)
         norm_all[:, 1, :] = (self.feats_all_g[:, 1, :] - self.phi_min_g) / (self.phi_max_g - self.phi_min_g)
@@ -134,7 +126,7 @@ class MyDataset(Dataset):
         return norm_all
 
     def inverse_piano(self, feats_each):
-        '''inverse to original range for piano'''
+        """inverse to original range for piano"""
         feats_orig = np.zeros((4, 8))
         feats_orig[0, :] = feats_each[0, :] * (self.freq_max_p - self.freq_min_p) + self.freq_min_p
         feats_orig[1, :] = feats_each[1, :] * (self.phi_max_p - self.phi_min_p) + self.phi_min_p
@@ -143,7 +135,7 @@ class MyDataset(Dataset):
         return feats_orig
 
     def inverse_guitar(self, feats_each):
-        '''inverse to original range for guitar'''
+        """inverse to original range for guitar"""
         feats_orig = np.zeros((4, 8))
         feats_orig[0, :] = feats_each[0, :] * (self.freq_max_g - self.freq_min_g) + self.freq_min_g
         feats_orig[1, :] = feats_each[1, :] * (self.phi_max_g - self.phi_min_g) + self.phi_min_g
@@ -163,7 +155,7 @@ class MyDataset(Dataset):
         piano_feats = self.feats_all_p_norm[idx]
         guitar_feats = self.feats_all_g_norm[idx]
 
-        return (piano_feats.astype(np.float32), guitar_feats.astype(np.float32), key_name)
+        return piano_feats.astype(np.float32), guitar_feats.astype(np.float32), key_name
 
 
 dataset_train = MyDataset(dataset_path, 'train')
@@ -174,15 +166,15 @@ print(f'[DATASET] Piano_shape: {dataset_train[0][0].shape}, guitar_shape: {datas
 
 
 class SimpleNet(nn.Module):
-    '''
+    """
     This is your FFNN model.
-    '''
+    """
 
     def __init__(self, input_dim, output_dim):
-        '''
+        """
         input_dim: input dimension
         output_dim: output dimension
-        '''
+        """
         super(SimpleNet, self).__init__()
         self.fc1 = nn.Linear(input_dim, 100)
         self.fc2 = nn.Linear(100, 100)
@@ -190,7 +182,7 @@ class SimpleNet(nn.Module):
         self.fc4 = nn.Linear(100, output_dim)
 
     def forward(self, inputs):
-        '''Net forward'''
+        """Net forward"""
         x = torch.tanh(self.fc1(inputs))
         x = torch.tanh(self.fc2(x))
         x = torch.tanh(self.fc3(x))
@@ -199,7 +191,7 @@ class SimpleNet(nn.Module):
 
 
 class Configer:
-    '''Parameters for training'''
+    """Parameters for training"""
     epoch = 5000
     batch_size = 4
     lr = 0.001
@@ -211,14 +203,14 @@ class Configer:
 
 
 def model_trainer(dataset_path):
-    '''train model
+    """train model
 
     Args:
         dataset_path: [String] folder to save dataset, please name it as "dataset";
 
     Returns:
         None, but save model to current_folder + "results/mode.pkl"
-    '''
+    """
     # configeration
     config = Configer()
 
@@ -280,11 +272,11 @@ def model_trainer(dataset_path):
     plt.savefig('results/MDS_loss.jpg', doi=300)
 
 
-model_trainer(dataset_path)
+model_trainer(dataset_path) # this line used to train the model
 
 
 def guitar_feature_generator(dataset_path, key_name):
-    '''Generate predicted guitar features from piano features
+    """Generate predicted guitar features from piano features
 
     Args:
         dataset_path: [String] folder to save dataset, please name it as "dataset";
@@ -294,7 +286,7 @@ def guitar_feature_generator(dataset_path, key_name):
         gen_guitar_feats: [List] contains predicted guitar features in a dict,
                           note that this part can be used to generate many guitar features,
                           so we use a list to store the guitar features.
-    '''
+    """
     config = Configer()
     model_path = dataset_path.replace('dataset', 'results') + '/model.pkl'
     net = SimpleNet(config.p_length, config.g_length)
@@ -386,8 +378,6 @@ for dt in gen_guitar_feats:
     print('*'*10)
 
 Audio(filename="dataset/piano/train/A4.wav")
-
 Audio(filename="dataset/guitar/train/A4.wav")
-
 Audio(filename="results/pred_guitar-A4.wav")
 
