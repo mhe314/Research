@@ -200,7 +200,7 @@ def guitar_feature_generator(dataset_path, key_name):
     """
 
     config = Configer()
-    model_path = dataset_path.replace('dataset', 'results') + '/model.pkl'
+    model_path = 'model.pkl'
     net = SimpleNet(config.p_length, config.g_length)
     net.to(device)
     net.load_state_dict(torch.load(model_path))
