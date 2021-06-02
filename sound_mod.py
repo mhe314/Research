@@ -1,28 +1,37 @@
-import streamlit as st
-
-st.title('Sound Modification App')
-
-# Use to save images to google drive
-# note that you may need to change to your own path in google drive
-# or remove this part and run in your local computer
 import glob
 from IPython.display import Audio
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import scipy.io
 import torch
 import torch.nn as nn
-import torch.optim as optim
-from torch.optim.lr_scheduler import StepLR
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
+import streamlit as st
+import feature_extractor
+import os
 
-dataset_path = '/content/drive/MyDrive/Colab/music_transfer/dataset'
-'/content/drive/MyDrive/Colab/music_transfer/results-MDS'
-'/content/drive/MyDrive/Colab/music_transfer/results-MDS'
+# TODO: need sound_generator.py
+# TODO: need melody_generator.py
 
 is_cuda = torch.cuda.is_available()
 device = torch.device('cuda' if is_cuda else 'cpu')
+
+st.title('Sound Modification App')
+
+
+# for uploading files to streamlit.io
+def file_selector(folder_path='.'):
+    filenames = os.listdir(folder_path)
+    selected_filename = st.selectbox('Select a file', filenames)
+    return os.path.join(folder_path, selected_filename)
+
+
+filename = file_selector()
+# TODO: do something with the data
+
+dataset_path = '/dataset'
 
 
 class MyDataset(Dataset):
@@ -75,15 +84,6 @@ class MyDataset(Dataset):
 
     def parse_minmax_p(self):
         """parse minmax for piano data"""
-        # feats_all = self.feats_all_p
-        # self.freq_max_p, self.freq_min_p = np.max(feats_all[:,0,:]), np.min(feats_all[:,0,:])
-        # self.phi_max_p, self.phi_min_p = np.max(feats_all[:,1,:]), np.min(feats_all[:,1,:])
-        # self.a_max_p, self.a_min_p = np.max(feats_all[:,2,:]), np.min(feats_all[:,2,:])
-        # self.b_max_p, self.b_min_p = np.max(feats_all[:,3,:]), np.min(feats_all[:,3,:])
-        # print(self.freq_max_p, self.freq_min_p)
-        # print(self.phi_max_p, self.phi_min_p)
-        # print(self.a_max_p, self.a_min_p)
-        # print(self.b_max_p, self.b_min_p)
         self.freq_max_p, self.freq_min_p = 8424.0, 440.0
         self.phi_max_p, self.phi_min_p = 1.0, 0.0
         self.a_max_p, self.a_min_p = 0.34, 0
@@ -92,15 +92,6 @@ class MyDataset(Dataset):
 
     def parse_minmax_g(self):
         """parse minmax for guitar data"""
-        # feats_all = self.feats_all_g
-        # self.freq_max_g, self.freq_min_g = np.max(feats_all[:,0,:]), np.min(feats_all[:,0,:])
-        # self.phi_max_g, self.phi_min_g = np.max(feats_all[:,1,:]), np.min(feats_all[:,1,:])
-        # self.a_max_g, self.a_min_g = np.max(feats_all[:,2,:]), np.min(feats_all[:,2,:])
-        # self.b_max_g, self.b_min_g = np.max(feats_all[:,3,:]), np.min(feats_all[:,3,:])
-        # print(self.freq_max_g, self.freq_min_g)
-        # print(self.phi_max_g, self.phi_min_g)
-        # print(self.a_max_g, self.a_min_g)
-        # print(self.b_max_g, self.b_min_g)
         self.freq_max_g, self.freq_min_g = 8424.0, 440.0
         self.phi_max_g, self.phi_min_g = 1.0, 0.0
         self.a_max_g, self.a_min_g = 0.23, 0
@@ -158,13 +149,6 @@ class MyDataset(Dataset):
         return piano_feats.astype(np.float32), guitar_feats.astype(np.float32), key_name
 
 
-dataset_train = MyDataset(dataset_path, 'train')
-dataset_test = MyDataset(dataset_path, 'test')
-print(f'[DATASET] The number of paired data (train): {len(dataset_train)}')
-print(f'[DATASET] The number of paired data (test): {len(dataset_test)}')
-print(f'[DATASET] Piano_shape: {dataset_train[0][0].shape}, guitar_shape: {dataset_train[0][1].shape}')
-
-
 class SimpleNet(nn.Module):
     """
     This is your FFNN model.
@@ -202,79 +186,6 @@ class Configer:
         super(Configer, self).__init__()
 
 
-def model_trainer(dataset_path):
-    """train model
-
-    Args:
-        dataset_path: [String] folder to save dataset, please name it as "dataset";
-
-    Returns:
-        None, but save model to current_folder + "results/mode.pkl"
-    """
-    # configeration
-    config = Configer()
-
-    dataset_train = MyDataset(dataset_path, 'train')
-    dataset_test = MyDataset(dataset_path, 'test')
-    print(f'[DATASET] The number of paired data (train): {len(dataset_train)}')
-    print(f'[DATASET] The number of paired data (test): {len(dataset_test)}')
-    print(f'[DATASET] Piano_shape: {dataset_train[0][0].shape}, guitar_shape: {dataset_train[0][1].shape}')
-
-    # dataset
-    train_loader = DataLoader(dataset_train, batch_size=config.batch_size, shuffle=True)
-    test_loader = DataLoader(dataset_test, batch_size=config.batch_size, shuffle=True)
-
-    net = SimpleNet(config.p_length, config.g_length)
-    net.to(device)
-    criterion = nn.MSELoss()
-    optimizer = optim.Adam(net.parameters(), lr=config.lr)
-    scheduler = StepLR(optimizer, step_size=int(config.epoch / 4.), gamma=0.3)
-
-    # Note that this part is about model_trainer
-    loss_list = []
-    for epoch_idx in range(config.epoch):
-        # train
-        for step, (piano_sound, guitar_sound, _) in enumerate(train_loader):
-            inputs = piano_sound.to(device)
-            targets = guitar_sound.to(device)
-            inputs = inputs.reshape(inputs.shape[0], 4, -1)
-            targets = targets.reshape(inputs.shape[0], 4, -1)
-
-            optimizer.zero_grad()
-            outputs = net(inputs)
-            loss = criterion(outputs, targets)
-            loss_list.append(loss.item())
-            loss.backward()
-            optimizer.step()
-
-        # eval
-        if epoch_idx % int(config.epoch / 10.) == 0:
-            net.eval()
-            for step, (inputs, targets, _) in enumerate(train_loader):
-                inputs = inputs.to(device)
-                targets = targets.to(device)
-                inputs = inputs.reshape(inputs.shape[0], 4, -1)
-                targets = targets.reshape(inputs.shape[0], 4, -1)
-                outputs = net(inputs)
-            loss = criterion(outputs, targets)
-            print(f'epoch: {epoch_idx}/{config.epoch}, loss: {loss.item()}')
-
-    # save model
-    torch.save(net.state_dict(), dataset_path.replace('dataset', 'results') + '/model.pkl')
-
-    # plot loss history
-    fig = plt.figure()
-    plt.plot(loss_list, 'k')
-    plt.ylim([0, 0.02])
-    plt.xlabel('Iteration', fontsize=16)
-    plt.ylabel('Loss', fontsize=16)
-    plt.tight_layout()
-    plt.savefig('results/MDS_loss.jpg', doi=300)
-
-
-model_trainer(dataset_path) # this line used to train the model
-
-
 def guitar_feature_generator(dataset_path, key_name):
     """Generate predicted guitar features from piano features
 
@@ -287,6 +198,7 @@ def guitar_feature_generator(dataset_path, key_name):
                           note that this part can be used to generate many guitar features,
                           so we use a list to store the guitar features.
     """
+
     config = Configer()
     model_path = dataset_path.replace('dataset', 'results') + '/model.pkl'
     net = SimpleNet(config.p_length, config.g_length)
@@ -297,6 +209,7 @@ def guitar_feature_generator(dataset_path, key_name):
     res, res_true = [], []
     dataset_train = MyDataset(dataset_path, 'train')
     train_loader = DataLoader(dataset_train, batch_size=config.batch_size, shuffle=True)
+
     for step, (inputs, targets, key_names) in enumerate(train_loader):
         inputs = inputs.to(device)
         targets = targets.to(device)
@@ -313,6 +226,7 @@ def guitar_feature_generator(dataset_path, key_name):
                 continue
 
             pred_feats_norm = gen_feats_batch[i].reshape(4, 8)
+
             # inverse data to original range
             pred_feats = dataset_train.inverse_guitar(pred_feats_norm)
             true_feats_norm = targets_batch[i].reshape(4, 8)
@@ -337,47 +251,37 @@ def guitar_feature_generator(dataset_path, key_name):
             res_true.append(d_true)
             res.append(d)
 
-            # plot results
-            fig = plt.figure(figsize=(12, 5))
-            ax1 = fig.add_subplot(1, 2, 1)
-            lns1 = plt.plot(pred_feats[0, :], pred_feats[2, :], '^', label='Prediction (G)')
-            lns2 = plt.plot(true_feats[0, :], true_feats[2, :], 'v', label='Ground Truth (G)')
-            plt.xlabel('Frequency', fontsize=16)
-            plt.ylabel('Amplitude', fontsize=16)
-            ax2 = ax1.twinx()
-            lns3 = plt.plot(inputs_feats[0, :], inputs_feats[2, :], 'o', c='g', label='Ground Truth (P)')
-            lns = lns1 + lns2 + lns3
-            labs = [l.get_label() for l in lns]
-            ax1.legend(lns, labs, loc=0, fontsize=14)
-            plt.title('Key: ' + key_names[i], fontsize=18)
-
-            ax3 = fig.add_subplot(1, 2, 2)
-            lns1 = plt.plot(pred_feats[1, :], pred_feats[3, :], '^', label='Prediction (G)')
-            lns2 = plt.plot(true_feats[1, :], true_feats[3, :], 'v', label='Ground Truth (G)')
-            plt.xlabel('Phase angle', fontsize=16)
-            plt.ylabel('Dampping coefficient $b_i$', fontsize=16)
-            ax4 = ax3.twinx()
-            lns3 = plt.plot(inputs_feats[1, :], inputs_feats[3, :], 'o', c='g', label='Ground Truth (P)')
-            lns = lns1 + lns2 + lns3
-            labs = [l.get_label() for l in lns]
-            ax3.legend(lns, labs, loc=0, fontsize=14)
-            plt.title('Key: ' + key_names[i], fontsize=18)
-
-            plt.tight_layout()
-            plt.savefig(f'results/MDS_pred_{key_names[i]}.jpg', doi=300)
+            # # plot results
+            # fig = plt.figure(figsize=(12, 5))
+            # ax1 = fig.add_subplot(1, 2, 1)
+            # lns1 = plt.plot(pred_feats[0, :], pred_feats[2, :], '^', label='Prediction (G)')
+            # lns2 = plt.plot(true_feats[0, :], true_feats[2, :], 'v', label='Ground Truth (G)')
+            # plt.xlabel('Frequency', fontsize=16)
+            # plt.ylabel('Amplitude', fontsize=16)
+            # ax2 = ax1.twinx()
+            # lns3 = plt.plot(inputs_feats[0, :], inputs_feats[2, :], 'o', c='g', label='Ground Truth (P)')
+            # lns = lns1 + lns2 + lns3
+            # labs = [l.get_label() for l in lns]
+            # ax1.legend(lns, labs, loc=0, fontsize=14)
+            # plt.title('Key: ' + key_names[i], fontsize=18)
+            #
+            # ax3 = fig.add_subplot(1, 2, 2)
+            # lns1 = plt.plot(pred_feats[1, :], pred_feats[3, :], '^', label='Prediction (G)')
+            # lns2 = plt.plot(true_feats[1, :], true_feats[3, :], 'v', label='Ground Truth (G)')
+            # plt.xlabel('Phase angle', fontsize=16)
+            # plt.ylabel('Dampping coefficient $b_i$', fontsize=16)
+            # ax4 = ax3.twinx()
+            # lns3 = plt.plot(inputs_feats[1, :], inputs_feats[3, :], 'o', c='g', label='Ground Truth (P)')
+            # lns = lns1 + lns2 + lns3
+            # labs = [l.get_label() for l in lns]
+            # ax3.legend(lns, labs, loc=0, fontsize=14)
+            # plt.title('Key: ' + key_names[i], fontsize=18)
+            #
+            # plt.tight_layout()
+            # plt.savefig(f'results/MDS_pred_{key_names[i]}.jpg', doi=300)
     return res
 
 
-gen_guitar_feats = guitar_feature_generator(dataset_path, 'A4')
-print('gen_guitar_feats', gen_guitar_feats)
+gen_guitar_feats = pd.DataFrame(guitar_feature_generator(dataset_path, 'A4'))
 
-# show prediction
-for dt in gen_guitar_feats:
-    for key, value in dt.items():
-        print("{}={}'".format(key, list(value)))
-    print('*'*10)
-
-Audio(filename="dataset/piano/train/A4.wav")
-Audio(filename="dataset/guitar/train/A4.wav")
-Audio(filename="results/pred_guitar-A4.wav")
-
+st.dataframe(gen_guitar_feats)
