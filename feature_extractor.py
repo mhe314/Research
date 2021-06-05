@@ -115,5 +115,8 @@ class FeatureExtractor:
     def save_features(self):
 
         mat_dic = {"a": self.a, "b": self.b, "phi": self.phi, "omega": self.omega}
-        save_feature_path = self.sound_file_path.replace('wav', 'mat')
+        st.title(type(self.sound_file_path.name))
+        save_feature_path = self.sound_file_path.name.replace('wav', 'mat')
         savemat(save_feature_path, mat_dic)
+
+        st.title('done saving')
