@@ -41,6 +41,8 @@ def get_user_data():
     else:
         FeatureExtractor(path_default_sound_file)
 
+    st.title('Found File')  # Title for streamlit app
+
 
 class MyDataset(Dataset):
     """Dataset for MDS method"""

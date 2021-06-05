@@ -5,6 +5,7 @@ from scipy.io import wavfile, savemat
 from scipy.fftpack import fft
 from scipy.signal import find_peaks, stft
 from scipy.optimize import curve_fit
+import streamlit as st
 
 
 class FeatureExtractor:
@@ -17,14 +18,16 @@ class FeatureExtractor:
         Fs, sound_data = wavfile.read(self.sound_file_path)
         y_data = sound_data[:, 0]
         t_data = np.linspace(0 + 1 / Fs, 1 / Fs * y_data.size, y_data.size)
+        y = y_data
+        t = t_data
 
         # FFT
-        N = y_data.size
+        N = y.size
         dt = 1 / Fs
         t = dt * np.linspace(0, N - 1, num=N)
         dF = Fs / N
         f = dF * np.linspace(0, N / 2 - 1, num=round(N / 2))
-        X = fft(y_data) / N
+        X = fft(y) / N
         X = X[0:round(N / 2)]
         X[1:] = 2 * X[1:]
         X = abs(X)
@@ -38,13 +41,16 @@ class FeatureExtractor:
 
         # Find fundamental frequencies
         Index = np.argmax(X)
+        basic_f = round(f[Index])
         TF = find_peaks(X, height=None, threshold=None, distance=round(Index))
         TF = TF[0]
         temp1 = f[TF]
         self.omega = temp1[0:8]
 
+        st.title('before stft')  # Title for streamlit app
+
         # short-time fourier transform
-        f, t, s = stft(y_data, Fs, window='boxcar', nperseg=2048 * 2, noverlap=None, nfft=None, detrend=False, return_onesided=True, )
+        f, t, s = stft(y, Fs, window='boxcar', nperseg=2048 * 2, noverlap=None, nfft=None, detrend=False, return_onesided=True, );
 
         if plot:
             f_plot = f[0:400]
@@ -55,6 +61,8 @@ class FeatureExtractor:
             plt.xlabel('Time [sec]')
             plt.show()
 
+        st.title('after stft plot')  # Title for streamlit app
+
         # Find initial guess of a and b
         self.a = np.zeros(8)
         self.b = np.zeros(8)
@@ -62,6 +70,7 @@ class FeatureExtractor:
             Index = np.argmin(np.abs(f - self.omega[i]))
             amp = np.abs(s[Index,])
             popt, pcov = curve_fit(self.func1, t, amp)
+            st.title('after loop curve_fit')  # Title for streamlit app
             self.a[i] = popt[0]
             self.b[i] = popt[1]
         c_ini = np.random.random(8)
@@ -69,6 +78,8 @@ class FeatureExtractor:
         p = c_ini
 
         popt, pcov = curve_fit(self.func3, t_data, y_data, p)
+
+        st.title('after curve_fit')  # Title for streamlit app
 
         self.phi = popt
         # for i in range(0, 7): #uncommend if you want to optimize all the features
@@ -78,26 +89,25 @@ class FeatureExtractor:
 
         self.save_features()
 
+        st.title('features saved')  # Title for streamlit app
+
     # Define fit function: optimize phase angles
-    def func1(self, x):
+    @staticmethod
+    def func1(x, a, b):
 
-        return self.a * np.exp(self.b * x)
+        return a * np.exp(b * x)
 
-    def func2(self, t, c0, c1, c2, c3, c4, c5, c6, c7):
-
-        f = self.a[0] * np.exp(self.b[0] * t) * np.sin(self.omega[0] * 2 * np.pi * t + c0) + self.a[1] * np.exp(self.b[1] * t) * np.sin(
-            self.omega[1] * 2 * np.pi * t + c1) + self.a[
-                2] * np.exp(self.b[2] * t) * np.sin(self.omega[2] * 2 * np.pi * t + c2) + self.a[3] * np.exp(self.b[3] * t) * np.sin(
-            self.omega[3] * 2 * np.pi * t + c3) + self.a[
-                4] * np.exp(self.b[4] * t) * np.sin(self.omega[4] * 2 * np.pi * t + c4) + self.a[5] * np.exp(self.b[5] * t) * np.sin(
-            self.omega[5] * 2 * np.pi * t + c5) + self.a[
-                6] * np.exp(self.b[6] * t) * np.sin(self.omega[6] * 2 * np.pi * t + c6) + self.a[7] * np.exp(self.b[7] * t) * np.sin(
-            self.omega[7] * 2 * np.pi * t + c7)
+    @staticmethod
+    def func2(t, c0, c1, c2, c3, c4, c5, c6, c7, a, b, omega):
+        f = a[0] * np.exp(b[0] * t) * np.sin(omega[0] * 2 * np.pi * t + c0) + a[1] * np.exp(b[1] * t) * np.sin(omega[1] * 2 * np.pi * t + c1) + a[
+            2] * np.exp(b[2] * t) * np.sin(omega[2] * 2 * np.pi * t + c2) + a[3] * np.exp(b[3] * t) * np.sin(omega[3] * 2 * np.pi * t + c3) + a[
+                4] * np.exp(b[4] * t) * np.sin(omega[4] * 2 * np.pi * t + c4) + a[5] * np.exp(b[5] * t) * np.sin(omega[5] * 2 * np.pi * t + c5) + a[
+                6] * np.exp(b[6] * t) * np.sin(omega[6] * 2 * np.pi * t + c6) + a[7] * np.exp(b[7] * t) * np.sin(omega[7] * 2 * np.pi * t + c7)
         return f
 
     def func3(self, t, c0, c1, c2, c3, c4, c5, c6, c7):
 
-        return self.func2(t, c0, c1, c2, c3, c4, c5, c6, c7)
+        return self.func2(t, c0, c1, c2, c3, c4, c5, c6, c7, self.a, self.b, self.omega)
 
     def save_features(self):
 
