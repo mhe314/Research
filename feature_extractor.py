@@ -6,6 +6,9 @@ from scipy.fftpack import fft
 from scipy.signal import find_peaks, stft
 from scipy.optimize import curve_fit
 import streamlit as st
+import os
+
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
 class FeatureExtractor:
