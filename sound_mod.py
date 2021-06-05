@@ -9,29 +9,37 @@ import torch.nn as nn
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 import streamlit as st
-import feature_extractor
 import os
+import io
+import scipy.integrate
+from scipy.io import wavfile, loadmat
+import math
+from scipy.io.wavfile import write
 
-# TODO: need sound_generator.py
-# TODO: need melody_generator.py
+from config import path_dataset, path_default_sound_file, path_model
+from feature_extractor import FeatureExtractor
+
+# TODO: need melody_generator.py: uploaded to collab right now
 
 is_cuda = torch.cuda.is_available()
 device = torch.device('cuda' if is_cuda else 'cpu')
 
-st.title('Sound Modification App')
+st.title('Sound Modification App')  # Title for streamlit app
 
 
-# for uploading files to streamlit.io
-def file_selector(folder_path='.'):
-    filenames = os.listdir(folder_path)
-    selected_filename = st.selectbox('Select a file', filenames)
-    return os.path.join(folder_path, selected_filename)
+# Grabbing sound file data
+def get_user_data():
 
+    flag = ['New dataset', 'Default dataset']
+    use_new_data = st.selectbox('Choose a new dataset or use default dataset', flag, 1)
 
-filename = file_selector()
-# TODO: do something with the data
+    # load dataset
+    if use_new_data == 'New dataset':
+        uploaded_file = st.file_uploader('Choose a CSV file', accept_multiple_files=False)
+        FeatureExtractor(uploaded_file)
 
-dataset_path = '/dataset'
+    else:
+        FeatureExtractor(path_default_sound_file)
 
 
 class MyDataset(Dataset):
@@ -141,8 +149,8 @@ class MyDataset(Dataset):
         if torch.is_tensor(idx):
             idx = idx.tolist()
 
-        piano_path = self.piano_list[idx]
-        key_name = piano_path.split('/')[-1].split('.')[0]
+        piano_path = self.piano_list[idx]       # piano sound path
+        key_name = piano_path.split('/')[-1].split('.')[0]  # this get the key name from the file
         piano_feats = self.feats_all_p_norm[idx]
         guitar_feats = self.feats_all_g_norm[idx]
 
@@ -186,7 +194,7 @@ class Configer:
         super(Configer, self).__init__()
 
 
-def guitar_feature_generator(dataset_path, key_name):
+def guitar_feature_generator(dataset_path, key_name, plot: bool = False):
     """Generate predicted guitar features from piano features
 
     Args:
@@ -200,10 +208,9 @@ def guitar_feature_generator(dataset_path, key_name):
     """
 
     config = Configer()
-    model_path = 'model.pkl'
     net = SimpleNet(config.p_length, config.g_length)
     net.to(device)
-    net.load_state_dict(torch.load(model_path))
+    net.load_state_dict(torch.load(path_model))
     net.eval()
 
     res, res_true = [], []
@@ -252,36 +259,37 @@ def guitar_feature_generator(dataset_path, key_name):
             res.append(d)
 
             # # plot results
-            # fig = plt.figure(figsize=(12, 5))
-            # ax1 = fig.add_subplot(1, 2, 1)
-            # lns1 = plt.plot(pred_feats[0, :], pred_feats[2, :], '^', label='Prediction (G)')
-            # lns2 = plt.plot(true_feats[0, :], true_feats[2, :], 'v', label='Ground Truth (G)')
-            # plt.xlabel('Frequency', fontsize=16)
-            # plt.ylabel('Amplitude', fontsize=16)
-            # ax2 = ax1.twinx()
-            # lns3 = plt.plot(inputs_feats[0, :], inputs_feats[2, :], 'o', c='g', label='Ground Truth (P)')
-            # lns = lns1 + lns2 + lns3
-            # labs = [l.get_label() for l in lns]
-            # ax1.legend(lns, labs, loc=0, fontsize=14)
-            # plt.title('Key: ' + key_names[i], fontsize=18)
-            #
-            # ax3 = fig.add_subplot(1, 2, 2)
-            # lns1 = plt.plot(pred_feats[1, :], pred_feats[3, :], '^', label='Prediction (G)')
-            # lns2 = plt.plot(true_feats[1, :], true_feats[3, :], 'v', label='Ground Truth (G)')
-            # plt.xlabel('Phase angle', fontsize=16)
-            # plt.ylabel('Dampping coefficient $b_i$', fontsize=16)
-            # ax4 = ax3.twinx()
-            # lns3 = plt.plot(inputs_feats[1, :], inputs_feats[3, :], 'o', c='g', label='Ground Truth (P)')
-            # lns = lns1 + lns2 + lns3
-            # labs = [l.get_label() for l in lns]
-            # ax3.legend(lns, labs, loc=0, fontsize=14)
-            # plt.title('Key: ' + key_names[i], fontsize=18)
-            #
-            # plt.tight_layout()
-            # plt.savefig(f'results/MDS_pred_{key_names[i]}.jpg', doi=300)
+            if plot:
+                fig = plt.figure(figsize=(12, 5))
+                ax1 = fig.add_subplot(1, 2, 1)
+                lns1 = plt.plot(pred_feats[0, :], pred_feats[2, :], '^', label='Prediction (G)')
+                lns2 = plt.plot(true_feats[0, :], true_feats[2, :], 'v', label='Ground Truth (G)')
+                plt.xlabel('Frequency', fontsize=16)
+                plt.ylabel('Amplitude', fontsize=16)
+                ax2 = ax1.twinx()
+                lns3 = plt.plot(inputs_feats[0, :], inputs_feats[2, :], 'o', c='g', label='Ground Truth (P)')
+                lns = lns1 + lns2 + lns3
+                labs = [l.get_label() for l in lns]
+                ax1.legend(lns, labs, loc=0, fontsize=14)
+                plt.title('Key: ' + key_names[i], fontsize=18)
+
+                ax3 = fig.add_subplot(1, 2, 2)
+                lns1 = plt.plot(pred_feats[1, :], pred_feats[3, :], '^', label='Prediction (G)')
+                lns2 = plt.plot(true_feats[1, :], true_feats[3, :], 'v', label='Ground Truth (G)')
+                plt.xlabel('Phase angle', fontsize=16)
+                plt.ylabel('Dampping coefficient $b_i$', fontsize=16)
+                ax4 = ax3.twinx()
+                lns3 = plt.plot(inputs_feats[1, :], inputs_feats[3, :], 'o', c='g', label='Ground Truth (P)')
+                lns = lns1 + lns2 + lns3
+                labs = [l.get_label() for l in lns]
+                ax3.legend(lns, labs, loc=0, fontsize=14)
+                plt.title('Key: ' + key_names[i], fontsize=18)
+
+                plt.tight_layout()
+                plt.savefig(f'results/MDS_pred_{key_names[i]}.jpg', doi=300)
     return res
 
 
-gen_guitar_feats = pd.DataFrame(guitar_feature_generator(dataset_path, 'A4'))
-
+get_user_data()
+gen_guitar_feats = pd.DataFrame(guitar_feature_generator(path_dataset, 'B4'))   # list of dictionaries: each with 4 dictionary keys
 st.dataframe(gen_guitar_feats)
