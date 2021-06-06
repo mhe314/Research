@@ -194,7 +194,7 @@ class Configer:
         super(Configer, self).__init__()
 
 
-def guitar_feature_generator(dataset_path, key_name, plot: bool = False):
+def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
     """Generate predicted guitar features from piano features
 
     Args:
