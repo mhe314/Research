@@ -65,6 +65,7 @@ class FeatureExtractor:
             plt.xlabel('Time [sec]')
             plt.show()
             st.pyplot()
+            st.set_option('deprecation.showPyplotGlobalUse', False)
 
         st.title('after stft plot')  # Title for streamlit app
 
