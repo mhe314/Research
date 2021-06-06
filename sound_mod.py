@@ -259,35 +259,35 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
             res.append(d)
 
             # # plot results
-            #if plot: 
-            fig = plt.figure(figsize=(12, 5))
-            st.pyplot(fig)
-            ax1 = fig.add_subplot(1, 2, 1)
-            lns1 = plt.plot(pred_feats[0, :], pred_feats[2, :], '^', label='Prediction (G)')
-            lns2 = plt.plot(true_feats[0, :], true_feats[2, :], 'v', label='Ground Truth (G)')
-            plt.xlabel('Frequency', fontsize=16)
-            plt.ylabel('Amplitude', fontsize=16)
-            ax2 = ax1.twinx()
-            lns3 = plt.plot(inputs_feats[0, :], inputs_feats[2, :], 'o', c='g', label='Ground Truth (P)')
-            lns = lns1 + lns2 + lns3
-            labs = [l.get_label() for l in lns]
-            ax1.legend(lns, labs, loc=0, fontsize=14)
-            plt.title('Key: ' + key_names[i], fontsize=18)
+            if plot: 
+                fig = plt.figure(figsize=(12, 5))
+                st.pyplot(fig)
+                ax1 = fig.add_subplot(1, 2, 1)
+                lns1 = plt.plot(pred_feats[0, :], pred_feats[2, :], '^', label='Prediction (G)')
+                lns2 = plt.plot(true_feats[0, :], true_feats[2, :], 'v', label='Ground Truth (G)')
+                plt.xlabel('Frequency', fontsize=16)
+                plt.ylabel('Amplitude', fontsize=16)
+                ax2 = ax1.twinx()
+                lns3 = plt.plot(inputs_feats[0, :], inputs_feats[2, :], 'o', c='g', label='Ground Truth (P)')
+                lns = lns1 + lns2 + lns3
+                labs = [l.get_label() for l in lns]
+                ax1.legend(lns, labs, loc=0, fontsize=14)
+                plt.title('Key: ' + key_names[i], fontsize=18)
 
-            ax3 = fig.add_subplot(1, 2, 2)
-            lns1 = plt.plot(pred_feats[1, :], pred_feats[3, :], '^', label='Prediction (G)')
-            lns2 = plt.plot(true_feats[1, :], true_feats[3, :], 'v', label='Ground Truth (G)')
-            plt.xlabel('Phase angle', fontsize=16)
-            plt.ylabel('Dampping coefficient $b_i$', fontsize=16)
-            ax4 = ax3.twinx()
-            lns3 = plt.plot(inputs_feats[1, :], inputs_feats[3, :], 'o', c='g', label='Ground Truth (P)')
-            lns = lns1 + lns2 + lns3
-            labs = [l.get_label() for l in lns]
-            ax3.legend(lns, labs, loc=0, fontsize=14)
-            plt.title('Key: ' + key_names[i], fontsize=18)
+                ax3 = fig.add_subplot(1, 2, 2)
+                lns1 = plt.plot(pred_feats[1, :], pred_feats[3, :], '^', label='Prediction (G)')
+                lns2 = plt.plot(true_feats[1, :], true_feats[3, :], 'v', label='Ground Truth (G)')
+                plt.xlabel('Phase angle', fontsize=16)
+                plt.ylabel('Dampping coefficient $b_i$', fontsize=16)
+                ax4 = ax3.twinx()
+                lns3 = plt.plot(inputs_feats[1, :], inputs_feats[3, :], 'o', c='g', label='Ground Truth (P)')
+                lns = lns1 + lns2 + lns3
+                labs = [l.get_label() for l in lns]
+                ax3.legend(lns, labs, loc=0, fontsize=14)
+                plt.title('Key: ' + key_names[i], fontsize=18)
 
-            plt.tight_layout()
-            plt.savefig(f'results/MDS_pred_{key_names[i]}.jpg', doi=300)
+                plt.tight_layout()
+                plt.savefig(f'results/MDS_pred_{key_names[i]}.jpg', doi=300)
 
         
     return res
