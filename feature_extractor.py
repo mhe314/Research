@@ -37,6 +37,7 @@ class FeatureExtractor:
 
         if plot:
             # Plot FFT
+            plt.title('FFT')
             plt.plot(f, X)
             xlim(0, 3000)  # Define x axis limitation in the figure
             plt.grid()
@@ -50,8 +51,6 @@ class FeatureExtractor:
         TF = TF[0]
         temp1 = f[TF]
         self.omega = temp1[0:8]
-
-        st.title('before stft')  # Title for streamlit app
 
         # short-time fourier transform
         f, t, s = stft(y, Fs, window='boxcar', nperseg=2048 * 2, noverlap=None, nfft=None, detrend=False, return_onesided=True, );
@@ -67,8 +66,6 @@ class FeatureExtractor:
             st.pyplot()
             st.set_option('deprecation.showPyplotGlobalUse', False)
 
-        st.title('after stft plot')  # Title for streamlit app
-
         # Find initial guess of a and b
         self.a = np.zeros(8)
         self.b = np.zeros(8)
@@ -76,7 +73,6 @@ class FeatureExtractor:
             Index = np.argmin(np.abs(f - self.omega[i]))
             amp = np.abs(s[Index,])
             popt, pcov = curve_fit(self.func1, t, amp)
-            st.title('after loop curve_fit')  # Title for streamlit app
             self.a[i] = popt[0]
             self.b[i] = popt[1]
         c_ini = np.random.random(8)
@@ -85,8 +81,6 @@ class FeatureExtractor:
 
         popt, pcov = curve_fit(self.func3, t_data, y_data, p)
 
-        st.title('after curve_fit')  # Title for streamlit app
-
         self.phi = popt
         # for i in range(0, 7): #uncommend if you want to optimize all the features
         # a_out[i]=popt[i]
@@ -94,8 +88,6 @@ class FeatureExtractor:
         # c_out[i]=popt[i+16]
 
         self.save_features()
-
-        st.title('features saved')  # Title for streamlit app
 
     # Define fit function: optimize phase angles
     @staticmethod
@@ -118,8 +110,5 @@ class FeatureExtractor:
     def save_features(self):
 
         mat_dic = {"a": self.a, "b": self.b, "phi": self.phi, "omega": self.omega}
-        st.title(type(self.sound_file_path.name))
         save_feature_path = self.sound_file_path.name.replace('wav', 'mat')
         savemat(save_feature_path, mat_dic)
-
-        st.title('done saving')

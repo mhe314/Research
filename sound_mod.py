@@ -28,18 +28,16 @@ st.title('Sound Modification App')  # Title for streamlit app
 
 
 # Grabbing sound file data
-def get_user_data():
+def get_user_data() -> bool:
 
-    flag = ['New dataset', 'Default dataset']
-    use_new_data = st.selectbox('Choose a new dataset or use default dataset', flag, 1)
+    uploaded_file = st.file_uploader('Choose a sound file', accept_multiple_files=False)
 
-    # load dataset
-    if use_new_data == 'New dataset':
-        uploaded_file = st.file_uploader('Choose a CSV file', accept_multiple_files=False)
+    if uploaded_file:
+        st.audio(uploaded_file)
         FeatureExtractor(uploaded_file)
+        return True
 
-    else:
-        FeatureExtractor(path_default_sound_file)
+    return False
 
 
 class MyDataset(Dataset):
@@ -289,10 +287,9 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
                 plt.tight_layout()
                 plt.savefig(f'results/MDS_pred_{key_names[i]}.jpg', doi=300)
 
-        
     return res
 
 
-get_user_data()
-gen_guitar_feats = pd.DataFrame(guitar_feature_generator(path_dataset, 'B4'))   # list of dictionaries: each with 4 dictionary keys
-st.dataframe(gen_guitar_feats)
+if get_user_data():
+    gen_guitar_feats = pd.DataFrame(guitar_feature_generator(path_dataset, 'B4'))   # list of dictionaries: each with 4 dictionary keys
+    st.dataframe(gen_guitar_feats)
