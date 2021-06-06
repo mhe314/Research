@@ -288,7 +288,7 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = False):
                 plt.tight_layout()
                 plt.savefig(f'results/MDS_pred_{key_names[i]}.jpg', doi=300)
                 
-                st.pyplot(fig)
+                st.pyplot()
     return res
 
 
