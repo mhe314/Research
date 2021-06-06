@@ -1,5 +1,4 @@
 import glob
-from IPython.display import Audio
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -9,8 +8,6 @@ import torch.nn as nn
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 import streamlit as st
-import os
-import io
 import scipy.integrate
 from scipy.io import wavfile, loadmat
 import math
@@ -25,6 +22,7 @@ is_cuda = torch.cuda.is_available()
 device = torch.device('cuda' if is_cuda else 'cpu')
 
 st.title('Sound Modification App')  # Title for streamlit app
+st.set_option('deprecation.showPyplotGlobalUse', False)
 
 
 # Grabbing sound file data
@@ -228,6 +226,7 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
 
         for i in range(gen_feats_batch.shape[0]):
             if key_names[i] != key_name:
+                st.title(('key name[i]:', key_names[i], 'key name:', key_name))
                 continue
 
             pred_feats_norm = gen_feats_batch[i].reshape(4, 8)
@@ -256,10 +255,12 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
             res_true.append(d_true)
             res.append(d)
 
+            st.title('Out of plot')
             # # plot results
-            if plot: 
+            if plot:
+                st.title('About to plot')  # Title for streamlit app
                 fig = plt.figure(figsize=(12, 5))
-                st.pyplot(fig)
+                # st.pyplot(fig)
                 ax1 = fig.add_subplot(1, 2, 1)
                 lns1 = plt.plot(pred_feats[0, :], pred_feats[2, :], '^', label='Prediction (G)')
                 lns2 = plt.plot(true_feats[0, :], true_feats[2, :], 'v', label='Ground Truth (G)')
@@ -285,7 +286,11 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
                 plt.title('Key: ' + key_names[i], fontsize=18)
 
                 plt.tight_layout()
-                plt.savefig(f'results/MDS_pred_{key_names[i]}.jpg', doi=300)
+                plt.show()
+                st.pyplot()
+                st.title('Plotted')  # Title for streamlit app
+
+                # plt.savefig(f'results/MDS_pred_{key_names[i]}.jpg', doi=300)
 
     return res
 

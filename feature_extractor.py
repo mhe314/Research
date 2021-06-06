@@ -41,7 +41,6 @@ class FeatureExtractor:
             plt.plot(f, X)
             xlim(0, 3000)  # Define x axis limitation in the figure
             plt.grid()
-            plt.show()
             st.pyplot()
 
         # Find fundamental frequencies
@@ -62,9 +61,7 @@ class FeatureExtractor:
             plt.title('STFT Magnitude')
             plt.ylabel('Frequency [Hz]')
             plt.xlabel('Time [sec]')
-            plt.show()
             st.pyplot()
-            st.set_option('deprecation.showPyplotGlobalUse', False)
 
         # Find initial guess of a and b
         self.a = np.zeros(8)
