@@ -261,6 +261,7 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = False):
             # # plot results
             #if plot: 
             fig = plt.figure(figsize=(12, 5))
+            st.pyplot(fig)
             ax1 = fig.add_subplot(1, 2, 1)
             lns1 = plt.plot(pred_feats[0, :], pred_feats[2, :], '^', label='Prediction (G)')
             lns2 = plt.plot(true_feats[0, :], true_feats[2, :], 'v', label='Ground Truth (G)')
@@ -288,7 +289,7 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = False):
             plt.tight_layout()
             plt.savefig(f'results/MDS_pred_{key_names[i]}.jpg', doi=300)
 
-            st.pyplot()
+        
     return res
 
 
