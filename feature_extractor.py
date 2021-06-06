@@ -13,7 +13,7 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 class FeatureExtractor:
 
-    def __init__(self, sound_file_path: str, plot: bool = False):
+    def __init__(self, sound_file_path: str, plot: bool = True):
 
         self.sound_file_path = sound_file_path  # this should be a .wav file
 
@@ -41,6 +41,7 @@ class FeatureExtractor:
             xlim(0, 3000)  # Define x axis limitation in the figure
             plt.grid()
             plt.show()
+            st.pyplot()
 
         # Find fundamental frequencies
         Index = np.argmax(X)
@@ -63,6 +64,7 @@ class FeatureExtractor:
             plt.ylabel('Frequency [Hz]')
             plt.xlabel('Time [sec]')
             plt.show()
+            st.pyplot()
 
         st.title('after stft plot')  # Title for streamlit app
 
