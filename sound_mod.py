@@ -229,6 +229,7 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
                 st.title(('key name[i]:', key_names[i], 'key name:', key_name))
                 continue
 
+            st.title('here')
             pred_feats_norm = gen_feats_batch[i].reshape(4, 8)
 
             # inverse data to original range
