@@ -45,10 +45,16 @@ class MyDataset(Dataset):
         super(MyDataset, self).__init__()
         self.feat_list = ['freq_out', 'amp_out', 'a_out', 'b_out']
         if data_type == 'train':
-            self.piano_list = glob.glob(f'{dataset_path}/piano/train/*.mat')
+            # self.piano_list = glob.glob(f'{dataset_path}/piano/train/*.mat')
+            self.piano_list = glob.glob(f'/piano/train/A4.mat')
+
         else:
-            self.piano_list = glob.glob(f'{dataset_path}/piano/test/*.mat')
+            # self.piano_list = glob.glob(f'{dataset_path}/piano/test/*.mat')
+            self.piano_list = glob.glob(f'/piano/test/A4.mat')
+
         self.guitar_list = self.parse_guitar_list()
+
+        print(self.piano_list)
 
         # without normalization
         self.feats_all_p = self.wrap_data(self.piano_list)  # all piano features
