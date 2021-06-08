@@ -53,7 +53,7 @@ class MyDataset(Dataset):
         # without normalization
         self.feats_all_p = self.wrap_data(self.piano_list)  # all piano features
         self.feats_all_g = self.wrap_data(self.guitar_list)
-        print('no norm', self.feats_all_p[0][0, :])
+        # print('no norm', self.feats_all_p[0][0, :])
 
         # normalization
         self.parse_minmax_p()
