@@ -45,10 +45,11 @@ class MyDataset(Dataset):
         super(MyDataset, self).__init__()
         self.feat_list = ['freq_out', 'amp_out', 'a_out', 'b_out']
         if data_type == 'train':
-            self.piano_list = glob.glob(f'**/*{dataset_path}/piano/train/*.mat', recursive=True)
-
+            # self.piano_list = glob.glob(glob.escape(f'{dataset_path}/piano/train/*.mat'))
+            self.piano_list = glob.glob('/**/*.mat', recursive=True)
         else:
-            self.piano_list = glob.glob(f'**/*{dataset_path}/piano/test/*.mat', recursive=True)
+            # self.piano_list = glob.glob(glob.escape(f'**/*{dataset_path}/piano/test/*.mat'))
+            self.piano_list = glob.glob('/**/*.mat', recursive=True)
 
         self.guitar_list = self.parse_guitar_list()
 
