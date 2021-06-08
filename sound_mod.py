@@ -13,7 +13,7 @@ from scipy.io import wavfile, loadmat
 import math
 from scipy.io.wavfile import write
 
-from config import path_dataset, path_default_sound_file, path_model
+from config import path_dataset, path_model
 from feature_extractor import FeatureExtractor
 
 # TODO: need melody_generator.py: uploaded to collab right now
