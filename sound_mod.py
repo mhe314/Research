@@ -243,7 +243,6 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
                 st.title(('key name[i]:', key_names[i], 'key name:', key_name))
                 continue
 
-            st.title('here')
             pred_feats_norm = gen_feats_batch[i].reshape(4, 8)
 
             # inverse data to original range
@@ -270,8 +269,7 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
             res_true.append(d_true)
             res.append(d)
 
-            st.title('Out of plot')
-            # # plot results
+            # plot results
             if plot:
                 st.title('About to plot')  # Title for streamlit app
                 fig = plt.figure(figsize=(12, 5))
@@ -307,10 +305,9 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
 
                 # plt.savefig(f'results/MDS_pred_{key_names[i]}.jpg', doi=300)
 
-                
     return res
 
 
 if get_user_data():
     gen_guitar_feats = pd.DataFrame(guitar_feature_generator(path_dataset, 'A4'))   # list of dictionaries: each with 4 dictionary keys
-    # st.dataframe(gen_guitar_feats)
+    st.dataframe(gen_guitar_feats)
