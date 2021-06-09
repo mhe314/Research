@@ -49,7 +49,7 @@ class MyDataset(Dataset):
         if data_type == 'train':
             # self.piano_list = glob.glob(glob.escape(f'{dataset_path}/piano/train/**/*.mat'))
             # self.piano_list = glob.glob(r'https://github.com/mhe314/Research/tree/master/piano/train/*.mat')
-            self.piano_list = [r'piano/train/A4.mat']
+            self.piano_list = [r'piano/train/A4.mat', r'piano/train/B5.mat']
 
             # self.piano_list = glob.glob('/**/*.mat', recursive=True)
         else:
@@ -57,7 +57,7 @@ class MyDataset(Dataset):
             # self.piano_list = glob.glob(r'https://github.com/mhe314/Research/tree/master/piano/test/*.mat')
 
             # self.piano_list = glob.glob(glob.escape('/piano/test/*.mat'))
-            self.piano_list = [r'piano/test/A4.mat']
+            self.piano_list = [r'piano/test/A4.mat', r'piano/train/B5.mat']
             # self.piano_list = glob.glob('/**/*.mat', recursive=True)
 
         self.guitar_list = self.parse_guitar_list()
@@ -309,5 +309,5 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
 
 
 if get_user_data():
-    gen_guitar_feats = pd.DataFrame(guitar_feature_generator(path_dataset, 'B4'))   # list of dictionaries: each with 4 dictionary keys
+    gen_guitar_feats = pd.DataFrame(guitar_feature_generator(path_dataset, 'B5'))   # list of dictionaries: each with 4 dictionary keys
     st.dataframe(gen_guitar_feats)
