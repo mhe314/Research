@@ -21,7 +21,7 @@ from feature_extractor import FeatureExtractor
 is_cuda = torch.cuda.is_available()
 device = torch.device('cuda' if is_cuda else 'cpu')
 
-st.title('Sound Modification App')  # Title for streamlit app
+st.title('Synthesizer')  # Title for streamlit app
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
 
