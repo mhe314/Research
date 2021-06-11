@@ -37,7 +37,8 @@ class FeatureExtractor:
 
         if plot:
             # Plot FFT
-            plt.title('FFT')
+            plt.title('Fast Fourier Transform')
+            #plt.ylabel('
             plt.plot(f, X)
             xlim(0, 3000)  # Define x axis limitation in the figure
             plt.grid()
@@ -58,7 +59,7 @@ class FeatureExtractor:
             f_plot = f[0:400]
             s_plot = np.log(np.abs(s[1:400, ]))
             plt.pcolormesh(t, f_plot, s_plot)
-            plt.title('STFT Magnitude')
+            plt.title('Short-time Fourier Transform Magnitude')
             plt.ylabel('Frequency [Hz]')
             plt.xlabel('Time [sec]')
             st.pyplot()
