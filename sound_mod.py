@@ -31,8 +31,10 @@ def get_user_data() -> bool:
     uploaded_file = st.file_uploader('Choose a sound file', accept_multiple_files=False)
 
     if uploaded_file:
+        check1 = st.checkbox('Display FFT')
+        check2 = st.checkbox('Display STFT')
         st.audio(uploaded_file)
-        FeatureExtractor(uploaded_file)
+        FeatureExtractor(uploaded_file, check1, check2)
         return True
 
     return False
