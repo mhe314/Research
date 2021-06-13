@@ -300,8 +300,8 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
 
                 plt.tight_layout()
                 plt.show()
-                st.pyplot()
-                st.title('Plotted')  # Title for streamlit app
+                #st.pyplot()
+                #st.title('Plotted')  # Title for streamlit app
 
                 # plt.savefig(f'results/MDS_pred_{key_names[i]}.jpg', doi=300)
 
@@ -312,3 +312,5 @@ if get_user_data():
     # TODO: change the key name (currently it is "A4")
     gen_guitar_feats = pd.DataFrame(guitar_feature_generator(path_dataset, 'A4'))   # list of dictionaries: each with 4 dictionary keys
     st.table(gen_guitar_feats)
+    st.pyplot()
+    st.title('Plotted')
