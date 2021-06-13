@@ -271,7 +271,7 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
 
             # plot results
             if plot:
-                st.title('About to plot')  # Title for streamlit app
+                #st.title('About to plot')  # Title for streamlit app
                 fig = plt.figure(figsize=(12, 5))
                 # st.pyplot(fig)
                 ax1 = fig.add_subplot(1, 2, 1)
@@ -311,6 +311,8 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
 if get_user_data():
     # TODO: change the key name (currently it is "A4")
     gen_guitar_feats = pd.DataFrame(guitar_feature_generator(path_dataset, 'A4'))   # list of dictionaries: each with 4 dictionary keys
+    st.title('Features')
     st.table(gen_guitar_feats)
-    st.pyplot()
     st.title('Plotted')
+    st.pyplot()
+    
