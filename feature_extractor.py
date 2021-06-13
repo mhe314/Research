@@ -9,11 +9,12 @@ import streamlit as st
 import os
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
-
+check1 = st.checkbox('Display FFT')
+check2 = st.checkbox('Display STFT')
 
 class FeatureExtractor:
 
-    def __init__(self, sound_file_path: str, plot: bool = True):
+    def __init__(self, sound_file_path: str, check1, check2):
 
         self.sound_file_path = sound_file_path  # this should be a .wav file
 
@@ -35,7 +36,7 @@ class FeatureExtractor:
         X[1:] = 2 * X[1:]
         X = abs(X)
 
-        if plot:
+        if check1:
             # Plot FFT
             plt.title('Fast Fourier Transform')
             plt.ylabel('Amplitude')
@@ -56,7 +57,7 @@ class FeatureExtractor:
         # short-time fourier transform
         f, t, s = stft(y, Fs, window='boxcar', nperseg=2048 * 2, noverlap=None, nfft=None, detrend=False, return_onesided=True, );
 
-        if plot:
+        if check2:
             f_plot = f[0:400]
             s_plot = np.log(np.abs(s[1:400, ]))
             plt.pcolormesh(t, f_plot, s_plot)
