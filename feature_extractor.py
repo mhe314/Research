@@ -37,6 +37,7 @@ class FeatureExtractor:
 
         if check1:
             # Plot FFT
+            st.title('Fast Fourier Transform Plot')
             plt.title('Fast Fourier Transform')
             plt.ylabel('Amplitude')
             plt.xlabel('Frequency [Hz]')
@@ -57,6 +58,7 @@ class FeatureExtractor:
         f, t, s = stft(y, Fs, window='boxcar', nperseg=2048 * 2, noverlap=None, nfft=None, detrend=False, return_onesided=True, );
 
         if check2:
+            st.title('Short-time Fourier Transform Plot')
             f_plot = f[0:400]
             s_plot = np.log(np.abs(s[1:400, ]))
             plt.pcolormesh(t, f_plot, s_plot)
