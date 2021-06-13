@@ -12,7 +12,7 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
 class FeatureExtractor:
-    def __init__(self, sound_file_path: str, check1, check2):
+    def __init__(self, sound_file_path: str, check1, check2, check3, check4):
         
 
         self.sound_file_path = sound_file_path  # this should be a .wav file
