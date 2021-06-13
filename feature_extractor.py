@@ -12,8 +12,6 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
 class FeatureExtractor:
-    check1 = st.checkbox('Display FFT')
-    check2 = st.checkbox('Display STFT')
     def __init__(self, sound_file_path: str, check1, check2):
         
 
