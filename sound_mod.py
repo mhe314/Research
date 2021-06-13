@@ -31,8 +31,10 @@ def get_user_data() -> bool:
     uploaded_file = st.file_uploader('Choose a sound file', accept_multiple_files=False)
 
     if uploaded_file:
-        check1 = st.checkbox('Display FFT')
-        check2 = st.checkbox('Display STFT')
+        check1 = st.checkbox('Display Fast Fourier Transform Plot')
+        check2 = st.checkbox('Display Short-time Fourier Transform Plot')
+        check3 = st.checkbox('Display Features')
+        check4 = st.checkbox('Display Plot of Features')
         st.audio(uploaded_file)
         FeatureExtractor(uploaded_file, check1, check2)
         return True
@@ -313,8 +315,10 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
 if get_user_data():
     # TODO: change the key name (currently it is "A4")
     gen_guitar_feats = pd.DataFrame(guitar_feature_generator(path_dataset, 'A4'))   # list of dictionaries: each with 4 dictionary keys
-    st.title('Features')
-    st.table(gen_guitar_feats)
-    st.title('Plotted')
-    st.pyplot()
+    if check3: 
+        st.title('Features')
+        st.table(gen_guitar_feats)
+    if check4: 
+        st.title('Plotted')
+        st.pyplot()
     
