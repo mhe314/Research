@@ -31,7 +31,7 @@ check4 = st.checkbox('Display Plot of Features')
 
 
 # Grabbing sound file data
-def get_user_data(check1, check2) -> bool:
+def get_user_data(check1, check2, check3, check4) -> bool:
 
     uploaded_file = st.file_uploader('Choose a sound file', accept_multiple_files=False)
 
@@ -313,7 +313,7 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
     return res
 
 
-if get_user_data(check1, check2)(check3, check4):
+if get_user_data(check1, check2, check3, check4):
     # TODO: change the key name (currently it is "A4")
     gen_guitar_feats = pd.DataFrame(guitar_feature_generator(path_dataset, 'A4'))   # list of dictionaries: each with 4 dictionary keys
     if check3: 
