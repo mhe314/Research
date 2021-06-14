@@ -39,7 +39,7 @@ class FeatureExtractor:
             # Plot FFT
             st.title('Fast Fourier Transform Plot')
             plt.title('Fast Fourier Transform')
-            plt.ylabel('Amplitude')
+            plt.ylabel('Magnitude')
             plt.xlabel('Frequency [Hz]')
             plt.plot(f, X)
             xlim(0, 3000)  # Define x axis limitation in the figure
