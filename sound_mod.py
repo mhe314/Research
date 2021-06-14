@@ -25,7 +25,7 @@ st.title('Synthesizer')  # Title for streamlit app
 st.text('Welcome to the Sound Modification App')
 st.text('1. Upload your audio file (ex: A4.wav)')
 st.text('2. Click the play button on the audio bar to hear the audio file you selected')
-st.text('3. Click on the checkbox below to display the plot you want to view. \n   You can select more than one at a time')
+st.text('3. Click on the checkbox below to display the plot you want to view. You can select more than one at a time')
 st.text('4. Once you select a plot, make sure to give the app a few moments to load the plot')
 st.text('')
 st.text('')
