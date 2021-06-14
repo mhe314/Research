@@ -26,7 +26,7 @@ st.text('Welcome to the Sound Modification App')
 st.text('1. Upload your audio file (ex: A4.wav)')
 st.text('2. Click the play button on the audio bar to hear the audio file you selected')
 st.text('3. Click on the checkbox below to display the plot you want to view')
-st.tetxt('')
+st.text('')
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
 check1 = st.checkbox('Display Fast Fourier Transform Plot')
