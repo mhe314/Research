@@ -71,6 +71,8 @@ class FeatureExtractor:
             plt.xlabel('Time [sec]')
             plt.annotate('Dominant Frequency', xy=(1.7,475), xytext=(1.9, 1100), arrowprops=dict(facecolor='black'),
             horizontalalignment='left', verticalalignment='top')
+            plt.annotate('High Frequency', xy=(1.1,2250), xytext=(1.3, 2300), arrowprops=dict(facecolor='black'),
+            horizontalalignment='left', verticalalignment='top')
             st.pyplot()
 
         # Find initial guess of a and b
