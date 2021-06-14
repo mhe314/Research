@@ -44,7 +44,7 @@ class FeatureExtractor:
             plt.plot(f, X)
             xlim(0, 3000)  # Define x axis limitation in the figure
             plt.grid()
-            plt.annotate('Dominant Frequencies', xy=(10,20), xytext=(500, 200))
+            plt.annotate('Dominant Frequencies', xy=(10,20), xytext=(550, 220))
             st.pyplot()
 
         # Find fundamental frequencies
