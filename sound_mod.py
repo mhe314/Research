@@ -22,6 +22,7 @@ is_cuda = torch.cuda.is_available()
 device = torch.device('cuda' if is_cuda else 'cpu')
 
 st.title('Synthesizer')  # Title for streamlit app
+st.text('Hello')
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
 check1 = st.checkbox('Display Fast Fourier Transform Plot')
