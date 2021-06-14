@@ -23,7 +23,7 @@ device = torch.device('cuda' if is_cuda else 'cpu')
 
 st.title('Synthesizer')  # Title for streamlit app
 st.text('Welcome to the Sound Modification App')
-st.text('In this app, the goal is to take your piano audio file as an input and using feature \n   engineering transform it to a guitar sound.')
+st.text('In this app, the goal is to take your piano audio file as an input and using feature \nengineering transform it to a guitar sound.')
 st.text('Follow the steps below for how to use the app!')
 st.text('')
 st.text('1. Upload your audio file (ex: A4.wav)')
