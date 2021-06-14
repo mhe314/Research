@@ -69,6 +69,8 @@ class FeatureExtractor:
             plt.title('Short-time Fourier Transform Magnitude')
             plt.ylabel('Frequency [Hz]')
             plt.xlabel('Time [sec]')
+            plt.annotate('Dominant Frequency', xy=(2.3,450), xytext=(2.5, 900), arrowprops=dict(facecolor='black'),
+            horizontalalignment='left', verticalalignment='top')
             st.pyplot()
 
         # Find initial guess of a and b
