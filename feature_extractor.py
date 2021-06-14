@@ -44,7 +44,7 @@ class FeatureExtractor:
             plt.plot(f, X)
             xlim(0, 3000)  # Define x axis limitation in the figure
             plt.grid()
-            plt.annotate('Dominant Frequencies', xy=(600,180), xytext=(750, 220), arrowprops=dict(facecolor='black', shrink=15),
+            plt.annotate('Dominant Frequencies', xy=(600,180), xytext=(750, 220), arrowprops=dict(facecolor='black', shrink=10),
             horizontalalignment='left', verticalalignment='top')
             st.pyplot()
 
