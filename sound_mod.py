@@ -15,6 +15,7 @@ from scipy.io.wavfile import write
 
 from config import path_dataset, path_model
 from feature_extractor import FeatureExtractor
+from sound_generator import SoundGenerator
 
 # TODO: need melody_generator.py: uploaded to collab right now
 
