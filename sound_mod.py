@@ -334,6 +334,8 @@ if get_user_data(check1, check2, check3, check4):
     if check4: 
         st.title('Plot of Features')
         st.pyplot()
+    
+    uploaded_file = st.file_uploader('Choose a sound file', accept_multiple_files=False)
         
     generated = SoundGenerator(uploaded_file)
     
