@@ -306,8 +306,8 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
                 ax3 = fig.add_subplot(1, 2, 2)
                 lns1 = plt.plot(pred_feats[1, :], pred_feats[3, :], '^', label='Prediction (G)')
                 lns2 = plt.plot(true_feats[1, :], true_feats[3, :], 'v', label='Ground Truth (G)')
-                plt.xlabel('Phase angle [radians]', fontsize=16)
-                plt.ylabel('Dampping coefficient, $b_i$', fontsize=16)
+                plt.xlabel('Phase Angle [radians]', fontsize=16)
+                plt.ylabel('Damping Coefficient, $b_i$', fontsize=16)
                 ax4 = ax3.twinx()
                 lns3 = plt.plot(inputs_feats[1, :], inputs_feats[3, :], 'o', c='g', label='Ground Truth (P)')
                 lns = lns1 + lns2 + lns3
