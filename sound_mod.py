@@ -335,5 +335,5 @@ if get_user_data(check1, check2, check3, check4):
         st.title('Plot of Features')
         st.pyplot()
         
-    generated = SoundGenerator(uploaded_file)
+    #generated = SoundGenerator(uploaded_file)
     
