@@ -273,15 +273,15 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
                 'Key': key_names[i],
                 'Frequency [Hz]': pred_feats[0, :],
                 'Phi [radians]': pred_feats[1, :],
-                'a': pred_feats[2, :],
-                'b': pred_feats[3, :],
+                'Amplitude (a)': pred_feats[2, :],
+                'Damping Coefficient (b)': pred_feats[3, :],
             }
             d_true = {
                 'Key': key_names[i],
                 'Frequency [Hz]': true_feats[0, :],
                 'Phi [radians]': true_feats[1, :],
-                'a': true_feats[2, :],
-                'b': true_feats[3, :],
+                'Amplitude (a)': true_feats[2, :],
+                'Damping Coefficient (b)': true_feats[3, :],
             }
             res_true.append(d_true)
             res.append(d)
