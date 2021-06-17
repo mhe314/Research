@@ -37,9 +37,9 @@ class FeatureExtractor:
 
         if check1:
             # Plot FFT
-#             ymax = max(f)
-#             xmax = f[ymax]
-            #xmax = X[xpos]
+            ymax = max(f)
+            xpos = np.argmax(f)
+            xmax = X[xpos]
             st.title('Fast Fourier Transform Plot')
             plt.title('Fast Fourier Transform')
             plt.ylabel('Magnitude')
