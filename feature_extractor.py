@@ -34,12 +34,13 @@ class FeatureExtractor:
         X = X[0:round(N / 2)]
         X[1:] = 2 * X[1:]
         X = abs(X)
+        
+        ymax = max(X)
+        xpos = np.argmax(X)
+        xmax = f[xpos]
 
         if check1:
             # Plot FFT
-            ymax = max(X)
-            xpos = np.argmax(X)
-            xmax = f[xpos]
             st.title('Fast Fourier Transform Plot')
             plt.title('Fast Fourier Transform')
             plt.ylabel('Magnitude')
@@ -75,8 +76,9 @@ class FeatureExtractor:
             plt.title('Short-time Fourier Transform Magnitude')
             plt.ylabel('Frequency [Hz]')
             plt.xlabel('Time [sec]')
-            plt.annotate('Dominant Frequency', xy=(1.7,475), xytext=(1.9, 1100), arrowprops=dict(facecolor='black'),
-            horizontalalignment='left', verticalalignment='top')
+#             plt.annotate('Dominant Frequency', xy=(1.7,475), xytext=(1.9, 1100), arrowprops=dict(facecolor='black'),
+#             horizontalalignment='left', verticalalignment='top')
+            plt.annotate('Dominant Frequency', xy=(1.7,xmax), xytext=(1.9, xmax+15))
             plt.annotate('High Frequency', xy=(1.2,2350), xytext=(1.3, 3000), arrowprops=dict(facecolor='black'),
             horizontalalignment='left', verticalalignment='top')
             st.pyplot()
