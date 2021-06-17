@@ -81,7 +81,7 @@ class FeatureExtractor:
             plt.annotate('Dominant Frequency', xy=(1.5,xmax), xytext=(1.5, xmax+40), weight='bold')
 #             plt.annotate('High Frequency', xy=(1.2,2350), xytext=(1.3, 3000), arrowprops=dict(facecolor='black'),
 #             horizontalalignment='left', verticalalignment='top')
-            plt.annotate('High Frequencies', xy=(1.5,xmax), xytext=(1.3, xmax+2500), weight='bold')
+            plt.annotate('High Frequencies', xy=(1.5,xmax), xytext=(1.3, xmax+2000), weight='bold')
             st.pyplot()
 
         # Find initial guess of a and b
