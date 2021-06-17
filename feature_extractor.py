@@ -48,11 +48,11 @@ class FeatureExtractor:
             xlim(0, 3000)  # Define x axis limitation in the figure
             plt.grid()
             plt.annotate('Dominant Frequency', xy=(525,265), xytext=(750, 320), arrowprops=dict(facecolor='black'),
-            horizontalalignment='left', verticalalignment='top')
+            horizontalalignment='left')
 #             plt.annotate('Dominant Frequency', xy=(xmax,ymax), xytext=(xmax+200, ymax), arrowprops=dict(facecolor='black'),
 #             horizontalalignment='left', verticalalignment='top')
             plt.annotate('High Frequency', xy=(2250,30), xytext=(2300, 90), arrowprops=dict(facecolor='black'),
-            horizontalalignment='left')
+            horizontalalignment='left', verticalalignment='top')
             st.pyplot()
 
         # Find fundamental frequencies
