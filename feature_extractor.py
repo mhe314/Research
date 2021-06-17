@@ -78,7 +78,7 @@ class FeatureExtractor:
             plt.xlabel('Time [sec]')
 #             plt.annotate('Dominant Frequency', xy=(1.7,475), xytext=(1.9, 1100), arrowprops=dict(facecolor='black'),
 #             horizontalalignment='left', verticalalignment='top')
-            plt.annotate('Dominant Frequency', xy=(1.7,xmax), xytext=(1.9, xmax+15))
+            plt.annotate('Dominant Frequency', xy=(1.5,xmax), xytext=(1.5, xmax+25))
             plt.annotate('High Frequency', xy=(1.2,2350), xytext=(1.3, 3000), arrowprops=dict(facecolor='black'),
             horizontalalignment='left', verticalalignment='top')
             st.pyplot()
