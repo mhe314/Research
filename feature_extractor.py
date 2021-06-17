@@ -51,8 +51,9 @@ class FeatureExtractor:
 #             horizontalalignment='left')
             plt.annotate('Dominant Frequency', xy=(xmax,ymax), xytext=(xmax+300, ymax+15), arrowprops=dict(facecolor='black', shrink=0.1),
             horizontalalignment='left', verticalalignment='top')
-            plt.annotate('High Frequency', xy=(2250,30), xytext=(2300, 90), arrowprops=dict(facecolor='black'),
-            horizontalalignment='left', verticalalignment='top')
+#             plt.annotate('High Frequency', xy=(2250,30), xytext=(2300, 90), arrowprops=dict(facecolor='black'),
+#             horizontalalignment='left', verticalalignment='top')
+            plt.annotate('High Frequency', xy=(xmax,ymax), xytext=(xmax+2000, ymax-200))
             st.pyplot()
 
         # Find fundamental frequencies
