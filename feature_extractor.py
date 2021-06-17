@@ -50,7 +50,7 @@ class FeatureExtractor:
             plt.grid()
 #             plt.annotate('Dominant Frequency', xy=(525,265), xytext=(750, 320), arrowprops=dict(facecolor='black'),
 #             horizontalalignment='left')
-            plt.annotate('Dominant Frequency', xy=(xmax,ymax), xytext=(xmax+300, ymax+15), weight='bold', arrowprops=dict(facecolor='black', shrink=0.1),
+            plt.annotate('Dominant Frequency', xy=(xmax,ymax), xytext=(xmax+400, ymax+15), weight='bold', arrowprops=dict(facecolor='black', shrink=0.1),
             horizontalalignment='left', verticalalignment='top')
 #             plt.annotate('High Frequency', xy=(2250,30), xytext=(2300, 90), arrowprops=dict(facecolor='black'),
 #             horizontalalignment='left', verticalalignment='top')
