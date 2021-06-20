@@ -40,6 +40,7 @@ check1 = st.checkbox('Display Fast Fourier Transform Plot')
 check2 = st.checkbox('Display Short-time Fourier Transform Plot')
 check3 = st.checkbox('Display Features')
 check4 = st.checkbox('Display Plot of Features')
+check5 = st.checkbox('Display Generated Audio')
 
 
 # Grabbing sound file data
@@ -335,5 +336,8 @@ if get_user_data(check1, check2, check3, check4):
         st.title('Plot of Features')
         st.pyplot()
         
+    if check5:
+        st.title('Generated Audio')
+        st.audio('guitar/train/A4.wav')
     #generated = SoundGenerator(uploaded_file)
     
