@@ -41,6 +41,7 @@ check2 = st.checkbox('Display Short-time Fourier Transform Plot')
 check3 = st.checkbox('Display Features')
 check4 = st.checkbox('Display Plot of Features')
 check5 = st.checkbox('Display Generated Audio')
+key = 'A4'
 
 
 # Grabbing sound file data
@@ -50,6 +51,7 @@ def get_user_data(check1, check2, check3, check4) -> bool:
 
     if uploaded_file:
         st.audio(uploaded_file)
+        key = uploaded_file.remove('.wav')
         FeatureExtractor(uploaded_file, check1, check2)
         return True
 
@@ -67,7 +69,7 @@ class MyDataset(Dataset):
         if data_type == 'train':
             # self.piano_list = glob.glob(glob.escape(f'{dataset_path}/piano/train/**/*.mat'))
             # self.piano_list = glob.glob(r'https://github.com/mhe314/Research/tree/master/piano/train/*.mat')
-            self.piano_list = [r'piano/train/A4.mat']
+            self.piano_list = [r'piano/train/%d.mat', key]
 
             # self.piano_list = glob.glob('/**/*.mat', recursive=True)
         else:
@@ -75,7 +77,7 @@ class MyDataset(Dataset):
             # self.piano_list = glob.glob(r'https://github.com/mhe314/Research/tree/master/piano/test/*.mat')
 
             # self.piano_list = glob.glob(glob.escape('/piano/test/*.mat'))
-            self.piano_list = [r'piano/test/A4.mat']
+            self.piano_list = [r'piano/test/%d.mat', key]
             # self.piano_list = glob.glob('/**/*.mat', recursive=True)
 
         self.guitar_list = self.parse_guitar_list()
@@ -328,7 +330,7 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
 
 if get_user_data(check1, check2, check3, check4):
     # TODO: change the key name (currently it is "A4")
-    gen_guitar_feats = pd.DataFrame(guitar_feature_generator(path_dataset, 'A4'))   # list of dictionaries: each with 4 dictionary keys
+    gen_guitar_feats = pd.DataFrame(guitar_feature_generator(path_dataset, key))   # list of dictionaries: each with 4 dictionary keys
     if check3: 
         st.title('Features')
         st.table(gen_guitar_feats)
@@ -338,6 +340,6 @@ if get_user_data(check1, check2, check3, check4):
         
     if check5:
         st.title('Generated Audio')
-        st.audio('guitar/train/A4.wav')
+        st.audio('guitar/train/%d.wav', key)
     #generated = SoundGenerator(uploaded_file)
     
