@@ -53,8 +53,9 @@ def get_user_data(check1, check2, check3, check4) -> bool:
     if uploaded_file:
         global key
         st.audio(uploaded_file)
-        file = uploaded_file('name')
+        file = str(uploaded_file)
         st.title(file)
+        file = file['name']
         key = file.replace('.wav', '')
         FeatureExtractor(uploaded_file, check1, check2)
         return True
