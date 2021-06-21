@@ -51,7 +51,7 @@ def get_user_data(check1, check2, check3, check4) -> bool:
 
     if uploaded_file:
         st.audio(uploaded_file)
-        key = uploaded_file.remove('.wav')
+        key = uploaded_file.removesuffex('.wav')
         FeatureExtractor(uploaded_file, check1, check2)
         return True
 
