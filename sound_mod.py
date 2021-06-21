@@ -57,6 +57,7 @@ def get_user_data(check1, check2, check3, check4) -> bool:
         return True
 
     return False
+st.title(key)
 
 
 class MyDataset(Dataset):
