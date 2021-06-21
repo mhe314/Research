@@ -41,8 +41,8 @@ check2 = st.checkbox('Display Short-time Fourier Transform Plot')
 check3 = st.checkbox('Display Features')
 check4 = st.checkbox('Display Plot of Features')
 check5 = st.checkbox('Display Generated Audio')
-key = 'A4'
 global key
+key = 'A4'
 
 
 # Grabbing sound file data
