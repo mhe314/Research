@@ -41,7 +41,7 @@ check2 = st.checkbox('Display Short-time Fourier Transform Plot')
 check3 = st.checkbox('Display Features')
 check4 = st.checkbox('Display Plot of Features')
 check5 = st.checkbox('Display Generated Audio')
-key = 'A4'
+global key = 'A4'
 
 
 # Grabbing sound file data
@@ -50,6 +50,7 @@ def get_user_data(check1, check2, check3, check4) -> bool:
     uploaded_file = st.file_uploader('Choose a sound file', accept_multiple_files=False)
 
     if uploaded_file:
+        global key
         st.audio(uploaded_file)
         file = str(uploaded_file)
         key = file.replace('.wav','')
