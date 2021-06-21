@@ -70,7 +70,7 @@ class MyDataset(Dataset):
         if data_type == 'train':
             # self.piano_list = glob.glob(glob.escape(f'{dataset_path}/piano/train/**/*.mat'))
             # self.piano_list = glob.glob(r'https://github.com/mhe314/Research/tree/master/piano/train/*.mat')
-            self.piano_list = [r'piano/train/%d.mat', key]
+            self.piano_list = [r'piano/train/{}.mat'.format(key)]
 
             # self.piano_list = glob.glob('/**/*.mat', recursive=True)
         else:
