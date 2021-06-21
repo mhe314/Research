@@ -78,7 +78,7 @@ class MyDataset(Dataset):
             # self.piano_list = glob.glob(r'https://github.com/mhe314/Research/tree/master/piano/test/*.mat')
 
             # self.piano_list = glob.glob(glob.escape('/piano/test/*.mat'))
-            self.piano_list = [r'piano/test/%d.mat', key]
+            self.piano_list = [r'piano/test/{}.mat'.format(key)]
             # self.piano_list = glob.glob('/**/*.mat', recursive=True)
 
         self.guitar_list = self.parse_guitar_list()
