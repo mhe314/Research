@@ -70,7 +70,7 @@ class MyDataset(Dataset):
 
     def __init__(self, dataset_path, data_type):
         super(MyDataset, self).__init__()
-        self.feat_list = ['freq_out', 'amp_out', 'a_out', 'b_out']
+        self.feat_list = ['freq_out', 'phi_out', 'a_out', 'b_out']
 
         # TODO: make the files paths universal to access github files
         if data_type == 'train':
