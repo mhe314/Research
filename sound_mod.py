@@ -347,6 +347,6 @@ if get_user_data(check1, check2, check3, check4):
         
     if check5:
         st.title('Generated Audio')
-        st.audio('guitar/train/{}.wav'.format(key))
-    #generated = SoundGenerator(uploaded_file)
+        #st.audio('guitar/train/{}.wav'.format(key))
+        generated = SoundGenerator(path_dataset)
     
