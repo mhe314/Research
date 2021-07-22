@@ -274,7 +274,7 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
 
             # inverse data to original range
             pred_feats = dataset_train.inverse_guitar(pred_feats_norm)
-            print(pred_feats)
+            st.title(pred_feats)
             true_feats_norm = targets_batch[i].reshape(4, 8)
             true_feats = dataset_train.inverse_guitar(true_feats_norm)
             inputs_feats_norm = inputs_batch[i].reshape(4, 8)
