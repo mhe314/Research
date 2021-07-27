@@ -274,7 +274,7 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
 
             # inverse data to original range
             pred_feats = dataset_train.inverse_guitar(pred_feats_norm)
-            st.title(pred_feats)
+            #st.title(pred_feats)
             #scipy.io.savemat('A4_generated.mat', pred_feats)
             true_feats_norm = targets_batch[i].reshape(4, 8)
             true_feats = dataset_train.inverse_guitar(true_feats_norm)
@@ -351,5 +351,5 @@ if get_user_data(check1, check2, check3, check4):
         st.title('Generated Audio')
         st.audio('guitar/train/{}.wav'.format(key))
         #generated = SoundGenerator(path_dataset)
-        st.audio(generated)
+        #st.audio(generated)
     
