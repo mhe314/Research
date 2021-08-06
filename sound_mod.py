@@ -68,7 +68,7 @@ def get_user_data(check1, check2, check3, check4) -> bool:
 class MyDataset(Dataset):
     """Dataset for MDS method"""
 
-    def __init__(self, dataset_path, data_type):
+    def __init__(self, path_dataset, data_type):
         super(MyDataset, self).__init__()
         self.feat_list = ['freq_out', 'phi_out', 'a_out', 'b_out']
 
@@ -231,7 +231,7 @@ class Configer:
         super(Configer, self).__init__()
 
 
-def model_trainer(dataset_path):
+def model_trainer(path_dataset):
     '''train model
     
     Args:
@@ -243,8 +243,8 @@ def model_trainer(dataset_path):
     # configeration
     config = Configer()
 
-    dataset_train = MyDataset(dataset_path, 'train')
-    dataset_test = MyDataset(dataset_path, 'test')
+    dataset_train = MyDataset(path_dataset, 'train')
+    dataset_test = MyDataset(path_dataset, 'test')
     print(f'[DATASET] The number of paired data (train): {len(dataset_train)}')
     print(f'[DATASET] The number of paired data (test): {len(dataset_test)}')
     print(f'[DATASET] Piano_shape: {dataset_train[0][0].shape}, guitar_shape: {dataset_train[0][1].shape}')
@@ -289,7 +289,7 @@ def model_trainer(dataset_path):
             print(f'epoch: {epoch_idx}/{config.epoch}, loss: {loss.item()}')
 
     # save model
-    torch.save(net.state_dict(), dataset_path.replace('dataset', 'results')+'/model.pkl')
+    torch.save(net.state_dict(), path_dataset.replace('dataset', 'results')+'/model.pkl')
 
     # plot loss history
     fig = plt.figure()
@@ -301,11 +301,11 @@ def model_trainer(dataset_path):
     st.pyplot()
     #plt.savefig('results-MDS/MDS_loss.jpg', doi=300)
 
-model_trainer(dataset_path)
+model_trainer(path_dataset)
 
 
 
-def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
+def guitar_feature_generator(path_dataset, key_name, plot: bool = True):
     """Generate predicted guitar features from piano features
 
     Args:
@@ -325,7 +325,7 @@ def guitar_feature_generator(dataset_path, key_name, plot: bool = True):
     net.eval()
 
     res, res_true = [], []
-    dataset_train = MyDataset(dataset_path, 'train')
+    dataset_train = MyDataset(path_dataset, 'train')
     train_loader = DataLoader(dataset_train, batch_size=config.batch_size, shuffle=True)
 
     for step, (inputs, targets, key_names) in enumerate(train_loader):
