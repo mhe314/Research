@@ -40,22 +40,23 @@ class FeatureExtractor:
         xmax = f[xpos]
 
         if check1:
+            with col1: 
             # Plot FFT
-            st.title('Fast Fourier Transform Plot')
-            plt.title('Fast Fourier Transform')
-            plt.ylabel('Magnitude')
-            plt.xlabel('Frequency [Hz]')
-            plt.plot(f, X)
-            xlim(0, 3000)  # Define x axis limitation in the figure
-            plt.grid()
-#             plt.annotate('Dominant Frequency', xy=(525,265), xytext=(750, 320), arrowprops=dict(facecolor='black'),
-#             horizontalalignment='left')
-            plt.annotate('Dominant Frequency', xy=(xmax,ymax), xytext=(xmax+400, ymax+15), weight='bold', arrowprops=dict(facecolor='black', shrink=0.1),
-            horizontalalignment='left', verticalalignment='top')
-#             plt.annotate('High Frequency', xy=(2250,30), xytext=(2300, 90), arrowprops=dict(facecolor='black'),
-#             horizontalalignment='left', verticalalignment='top')
-            plt.annotate('High Frequencies', xy=(xmax,ymax), xytext=(1850, 0.2*ymax), weight='bold')
-            st.pyplot()
+                st.title('Fast Fourier Transform Plot')
+                plt.title('Fast Fourier Transform')
+                plt.ylabel('Magnitude')
+                plt.xlabel('Frequency [Hz]')
+                plt.plot(f, X)
+                xlim(0, 3000)  # Define x axis limitation in the figure
+                plt.grid()
+    #             plt.annotate('Dominant Frequency', xy=(525,265), xytext=(750, 320), arrowprops=dict(facecolor='black'),
+    #             horizontalalignment='left')
+                plt.annotate('Dominant Frequency', xy=(xmax,ymax), xytext=(xmax+400, ymax+15), weight='bold', arrowprops=dict(facecolor='black', shrink=0.1),
+                horizontalalignment='left', verticalalignment='top')
+    #             plt.annotate('High Frequency', xy=(2250,30), xytext=(2300, 90), arrowprops=dict(facecolor='black'),
+    #             horizontalalignment='left', verticalalignment='top')
+                plt.annotate('High Frequencies', xy=(xmax,ymax), xytext=(1850, 0.2*ymax), weight='bold')
+                st.pyplot()
 
         # Find fundamental frequencies
         Index = np.argmax(X)
@@ -69,20 +70,21 @@ class FeatureExtractor:
         f, t, s = stft(y, Fs, window='boxcar', nperseg=2048 * 2, noverlap=None, nfft=None, detrend=False, return_onesided=True, );
 
         if check2:
-            st.title('Short-time Fourier Transform Plot')
-            f_plot = f[0:400]
-            s_plot = np.log(np.abs(s[1:400, ]))
-            plt.pcolormesh(t, f_plot, s_plot)
-            plt.title('Short-time Fourier Transform Magnitude')
-            plt.ylabel('Frequency [Hz]')
-            plt.xlabel('Time [sec]')
-#             plt.annotate('Dominant Frequency', xy=(1.7,475), xytext=(1.9, 1100), arrowprops=dict(facecolor='black'),
-#             horizontalalignment='left', verticalalignment='top')
-            plt.annotate('Dominant Frequency', xy=(1.5,xmax), xytext=(1.5, xmax+40), weight='bold')
-#             plt.annotate('High Frequency', xy=(1.2,2350), xytext=(1.3, 3000), arrowprops=dict(facecolor='black'),
-#             horizontalalignment='left', verticalalignment='top')
-            plt.annotate('High Frequencies', xy=(1.5,xmax), xytext=(1.3, xmax+2200), weight='bold')
-            st.pyplot()
+            with col1: 
+                st.title('Short-time Fourier Transform Plot')
+                f_plot = f[0:400]
+                s_plot = np.log(np.abs(s[1:400, ]))
+                plt.pcolormesh(t, f_plot, s_plot)
+                plt.title('Short-time Fourier Transform Magnitude')
+                plt.ylabel('Frequency [Hz]')
+                plt.xlabel('Time [sec]')
+    #             plt.annotate('Dominant Frequency', xy=(1.7,475), xytext=(1.9, 1100), arrowprops=dict(facecolor='black'),
+    #             horizontalalignment='left', verticalalignment='top')
+                plt.annotate('Dominant Frequency', xy=(1.5,xmax), xytext=(1.5, xmax+40), weight='bold')
+    #             plt.annotate('High Frequency', xy=(1.2,2350), xytext=(1.3, 3000), arrowprops=dict(facecolor='black'),
+    #             horizontalalignment='left', verticalalignment='top')
+                plt.annotate('High Frequencies', xy=(1.5,xmax), xytext=(1.3, xmax+2200), weight='bold')
+                st.pyplot()
 
         # Find initial guess of a and b
         self.a = np.zeros(8)
