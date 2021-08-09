@@ -45,6 +45,7 @@ check5 = st.checkbox('Display Generated Audio')
 global key
 key = 'A4'
 
+st.beta_set_page_config(layout="wide")
 col1, col2 = st.beta_columns(2)
 
 # Grabbing sound file data
