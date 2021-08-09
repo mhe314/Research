@@ -321,7 +321,7 @@ def guitar_feature_generator(path_dataset, key_name, plot: bool = True):
     config = Configer()
     net = SimpleNet(config.p_length, config.g_length)
     net.to(device)
-    net.load_state_dict(torch.load(path_model), map_location=torch.device('cpu')))
+    net.load_state_dict(torch.load(path_model), map_location=torch.device('cpu'))
     net.eval()
 
     res, res_true = [], []
