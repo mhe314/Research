@@ -373,40 +373,40 @@ def guitar_feature_generator(path_dataset, key_name, plot: bool = True):
             res.append(d)
 
             # plot results
-            if plot:
-                #st.title('About to plot')  # Title for streamlit app
-                fig = plt.figure(figsize=(12, 5))
-                # st.pyplot(fig)
-                ax1 = fig.add_subplot(1, 2, 1)
-                lns1 = plt.plot(pred_feats[0, :], pred_feats[2, :], '^', label='Prediction (G)')
-                lns2 = plt.plot(true_feats[0, :], true_feats[2, :], 'v', label='Ground Truth (G)')
-                plt.xlabel('Frequency [Hz]', fontsize=16)
-                plt.ylabel('Amplitude, a', fontsize=16)
-                ax2 = ax1.twinx()
-                lns3 = plt.plot(inputs_feats[0, :], inputs_feats[2, :], 'o', c='g', label='Ground Truth (P)')
-                lns = lns1 + lns2 + lns3
-                labs = [l.get_label() for l in lns]
-                ax1.legend(lns, labs, loc=0, fontsize=14)
-                plt.title('Key: ' + key_names[i], fontsize=18)
+        if plot:
+            #st.title('About to plot')  # Title for streamlit app
+            fig = plt.figure(figsize=(12, 5))
+            # st.pyplot(fig)
+            ax1 = fig.add_subplot(1, 2, 1)
+            lns1 = plt.plot(pred_feats[0, :], pred_feats[2, :], '^', label='Prediction (G)')
+            lns2 = plt.plot(true_feats[0, :], true_feats[2, :], 'v', label='Ground Truth (G)')
+            plt.xlabel('Frequency [Hz]', fontsize=16)
+            plt.ylabel('Amplitude, a', fontsize=16)
+            ax2 = ax1.twinx()
+            lns3 = plt.plot(inputs_feats[0, :], inputs_feats[2, :], 'o', c='g', label='Ground Truth (P)')
+            lns = lns1 + lns2 + lns3
+            labs = [l.get_label() for l in lns]
+            ax1.legend(lns, labs, loc=0, fontsize=14)
+            plt.title('Key: ' + key_names[i], fontsize=18)
 
-                ax3 = fig.add_subplot(1, 2, 2)
-                lns1 = plt.plot(pred_feats[1, :], pred_feats[3, :], '^', label='Prediction (G)')
-                lns2 = plt.plot(true_feats[1, :], true_feats[3, :], 'v', label='Ground Truth (G)')
-                plt.xlabel('Phase Angle [radians]', fontsize=16)
-                plt.ylabel('Damping Coefficient, $b_i$', fontsize=16)
-                ax4 = ax3.twinx()
-                lns3 = plt.plot(inputs_feats[1, :], inputs_feats[3, :], 'o', c='g', label='Ground Truth (P)')
-                lns = lns1 + lns2 + lns3
-                labs = [l.get_label() for l in lns]
-                ax3.legend(lns, labs, loc=0, fontsize=14)
-                plt.title('Key: ' + key_names[i], fontsize=18)
+            ax3 = fig.add_subplot(1, 2, 2)
+            lns1 = plt.plot(pred_feats[1, :], pred_feats[3, :], '^', label='Prediction (G)')
+            lns2 = plt.plot(true_feats[1, :], true_feats[3, :], 'v', label='Ground Truth (G)')
+            plt.xlabel('Phase Angle [radians]', fontsize=16)
+            plt.ylabel('Damping Coefficient, $b_i$', fontsize=16)
+            ax4 = ax3.twinx()
+            lns3 = plt.plot(inputs_feats[1, :], inputs_feats[3, :], 'o', c='g', label='Ground Truth (P)')
+            lns = lns1 + lns2 + lns3
+            labs = [l.get_label() for l in lns]
+            ax3.legend(lns, labs, loc=0, fontsize=14)
+            plt.title('Key: ' + key_names[i], fontsize=18)
 
-                plt.tight_layout()
-                plt.show()
-                #st.pyplot()
-                #st.title('Plotted')  # Title for streamlit app
+            plt.tight_layout()
+            plt.show()
+            #st.pyplot()
+            #st.title('Plotted')  # Title for streamlit app
 
-                # plt.savefig(f'results/MDS_pred_{key_names[i]}.jpg', doi=300)
+            # plt.savefig(f'results/MDS_pred_{key_names[i]}.jpg', doi=300)
 
     return res
 
