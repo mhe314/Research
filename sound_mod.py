@@ -22,6 +22,7 @@ from sound_generator import SoundGenerator
 is_cuda = torch.cuda.is_available()
 device = torch.device('cuda' if is_cuda else 'cpu')
 
+st.beta_set_page_config(layout="wide")
 st.title('Synthesizer')  # Title for streamlit app
 st.text('Welcome to the Sound Modification App')
 st.text('In this app, the goal is to take your piano audio file as an input and using feature \nengineering transform it to a guitar sound.')
@@ -45,7 +46,7 @@ check5 = st.checkbox('Display Generated Audio')
 global key
 key = 'A4'
 
-st.beta_set_page_config(layout="wide")
+
 col1, col2 = st.beta_columns(2)
 
 # Grabbing sound file data
