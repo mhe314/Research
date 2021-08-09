@@ -61,7 +61,7 @@ def get_user_data(check1, check2, check3, check4) -> bool:
             st.audio(uploaded_file)
         file = str(uploaded_file)
         #st.title(file)
-        file = file[25:27]
+        file = file[25:28]
         key = file.replace('.wav', '')
         FeatureExtractor(uploaded_file, check1, check2, col1)
         return True
