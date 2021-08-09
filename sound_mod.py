@@ -427,5 +427,5 @@ if get_user_data(check1, check2, check3, check4):
         #st.audio('guitar/train/{}.wav'.format(key))
         #generated = SoundGenerator(path_dataset)
         #st.audio(generated)
-         SoundGenerator("piano/train/A4.mat")
+        SoundGenerator("piano/train/A4.mat")
         st.audio("piano/train/A4_generated.wav")
