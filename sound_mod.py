@@ -348,11 +348,11 @@ def guitar_feature_generator(path_dataset, key_name, plot: bool = True):
 
             # inverse data to original range
             pred_feats = dataset_train.inverse_guitar(pred_feats_norm)
-            st.title(pred_feats[0, ;3])
+            st.title(pred_feats[0, :3])
             #scipy.io.savemat('A4_generated.mat', pred_feats)
             true_feats_norm = targets_batch[i].reshape(4, 8)
             true_feats = dataset_train.inverse_guitar(true_feats_norm)
-            st.title(true_feats[0, ;3])
+            st.title(true_feats[0, :3])
             inputs_feats_norm = inputs_batch[i].reshape(4, 8)
             inputs_feats = dataset_train.inverse_piano(inputs_feats_norm)
 
