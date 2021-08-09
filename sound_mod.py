@@ -52,7 +52,8 @@ col1, col2 = st.beta_columns([3,1])
 # Grabbing sound file data
 def get_user_data(check1, check2, check3, check4) -> bool:
 
-    uploaded_file = st.file_uploader('Choose a sound file', accept_multiple_files=False)
+    with col1: 
+        uploaded_file = st.file_uploader('Choose a sound file', accept_multiple_files=False)
 
     if uploaded_file:
         global key
