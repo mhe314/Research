@@ -45,6 +45,7 @@ check5 = st.checkbox('Display Generated Audio')
 global key
 key = 'A4'
 
+col1, col2 = st.beta_columns(2)
 
 # Grabbing sound file data
 def get_user_data(check1, check2, check3, check4) -> bool:
@@ -416,16 +417,19 @@ if get_user_data(check1, check2, check3, check4):
     # TODO: change the key name (currently it is "A4")
     gen_guitar_feats = pd.DataFrame(guitar_feature_generator(path_dataset, key))   # list of dictionaries: each with 4 dictionary keys
     if check3: 
-        st.title('Features')
-        st.table(gen_guitar_feats)
+        with col1: 
+            st.title('Features')
+            st.table(gen_guitar_feats)
     if check4: 
-        st.title('Plot of Features')
-        st.pyplot()
+        with col1: 
+            st.title('Plot of Features')
+            st.pyplot()
         
     if check5:
-        st.title('Generated Audio')
-        #st.audio('guitar/train/{}.wav'.format(key))
-        #generated = SoundGenerator(path_dataset)
-        #st.audio(generated)
-        SoundGenerator("piano/train/{}.mat".format(key))
-        st.audio("piano/train/{}_generated.wav".format(key))
+        with col1: 
+            st.title('Generated Audio')
+            #st.audio('guitar/train/{}.wav'.format(key))
+            #generated = SoundGenerator(path_dataset)
+            #st.audio(generated)
+            SoundGenerator("piano/train/{}.mat".format(key))
+            st.audio("piano/train/{}_generated.wav".format(key))
