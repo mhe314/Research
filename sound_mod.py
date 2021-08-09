@@ -57,7 +57,8 @@ def get_user_data(check1, check2, check3, check4) -> bool:
 
     if uploaded_file:
         global key
-        st.audio(uploaded_file)
+        with col1: 
+            st.audio(uploaded_file)
         file = str(uploaded_file)
         #st.title(file)
         file = file[25:27]
