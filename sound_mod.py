@@ -113,7 +113,9 @@ with col2:
     st.markdown('##')
     st.markdown('##')
     
-    st.beta_expander(label='STFT explanation')
+    STFTbox = st.beta_expander(label='STFT explanation')
+    with STFTbox:
+        'This is the plot for the Short Time Fourier Transformation.'
     
     st.markdown('##')
     st.markdown('##')
@@ -131,7 +133,9 @@ with col2:
     st.markdown('##')
     st.markdown('##')
     
-    st.beta_expander(label='Features Table explanation')
+    FTable = st.beta_expander(label='Features Table explanation')
+    with FTable: 
+        'Here are the resulting guitar features!'
     
     st.markdown('##')
     st.markdown('##')
@@ -141,7 +145,9 @@ with col2:
     st.markdown('##')
     st.markdown('##')
     
-    st.beta_expander(label='Features Plot explanation')
+    FPlot = st.beta_expander(label='Features Plot explanation')
+    with FPlot: 
+        'Here we have a plot that compares the generated guitar features with the real sound featuers.'
     
     st.markdown('##')
     st.markdown('##')
@@ -151,7 +157,9 @@ with col2:
     st.markdown('##')
     st.markdown('##')
     
-    st.beta_expander(label='Generated Audio explanation')
+    GAudio = st.beta_expander(label='Generated Audio explanation')
+    with GAudio: 
+        "Yay! We've generated a guitar sound!" 
 
 
 class MyDataset(Dataset):
