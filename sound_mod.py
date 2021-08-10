@@ -47,7 +47,7 @@ global key
 key = 'A4'
 
 
-col1, col2 = st.beta_columns([3,2])
+col1, col2 = st.beta_columns([5,4])
 
 # Grabbing sound file data
 def get_user_data(check1, check2, check3, check4) -> bool:
