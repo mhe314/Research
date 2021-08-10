@@ -72,7 +72,7 @@ with col2:
     st.text('')
     st.text('')
     st.text('')
-    st.markdown('#######')
+    st.markdown('##')
     
     st.beta_expander(label='FFT explanation')
     
