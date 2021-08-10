@@ -47,7 +47,7 @@ class FeatureExtractor:
             plt.ylabel('Magnitude')
             plt.xlabel('Frequency [Hz]')
             plt.plot(f, X)
-            xlim(0, 3000)  # Define x axis limitation in the figure
+            xlim(0, 4000)  # Define x axis limitation in the figure
             plt.grid()
 #             plt.annotate('Dominant Frequency', xy=(525,265), xytext=(750, 320), arrowprops=dict(facecolor='black'),
 #             horizontalalignment='left')
