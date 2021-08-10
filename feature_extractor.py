@@ -55,7 +55,7 @@ class FeatureExtractor:
             horizontalalignment='left', verticalalignment='top')
 #             plt.annotate('High Frequency', xy=(2250,30), xytext=(2300, 90), arrowprops=dict(facecolor='black'),
 #             horizontalalignment='left', verticalalignment='top')
-            plt.annotate('High Frequencies', xy=(xmax,ymax), xytext=(1850, 0.2*ymax), weight='bold')
+            plt.annotate('High Frequencies', xy=(xmax,ymax), xytext=(2100, 0.2*ymax), weight='bold')
             st.pyplot()
 
         # Find fundamental frequencies
@@ -83,7 +83,7 @@ class FeatureExtractor:
             plt.annotate('Dominant Frequency', xy=(1.5,xmax), xytext=(1.5, xmax+40), weight='bold')
 #             plt.annotate('High Frequency', xy=(1.2,2350), xytext=(1.3, 3000), arrowprops=dict(facecolor='black'),
 #             horizontalalignment='left', verticalalignment='top')
-            plt.annotate('High Frequencies', xy=(1.5,xmax), xytext=(1.3, xmax+2200), weight='bold')
+            plt.annotate('High Frequencies', xy=(1.5,xmax), xytext=(1.3, xmax+2500), weight='bold')
             st.pyplot()
 
         # Find initial guess of a and b
