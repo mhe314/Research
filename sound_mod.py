@@ -88,7 +88,22 @@ with col2:
     
     st.beta_expander(label='FFT explanation')
     
-    st.text('')
+     st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
     
     st.beta_expander(label='STFT explanation')
 
