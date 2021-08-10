@@ -68,6 +68,8 @@ def get_user_data() -> bool:
 
     return False
 #st.title(key)
+with col2:
+    st.beta_expander(label='FFT explanation')
 
 
 class MyDataset(Dataset):
