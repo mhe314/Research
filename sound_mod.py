@@ -86,7 +86,9 @@ with col2:
     st.markdown('##')
     st.markdown('##')
     
-    st.beta_expander(label='FFT explanation')
+    FFTbox = st.beta_expander(label='FFT explanation')
+    with FFTbox: 
+        'This is the Fast Fourier Transform plot' 
     
     st.markdown('##')
     st.markdown('##')
