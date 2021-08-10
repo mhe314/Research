@@ -140,12 +140,6 @@ with col2:
     st.markdown('##')
     st.markdown('##')
     st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
     
     st.beta_expander(label='Features Plot explanation')
 
