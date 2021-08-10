@@ -70,7 +70,11 @@ def get_user_data() -> bool:
 #st.title(key)
 with col2:
     st.text('')
+    
     st.beta_expander(label='FFT explanation')
+    
+    st.text('')
+    
     st.beta_expander(label='STFT explanation')
 
 
