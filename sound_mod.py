@@ -69,7 +69,7 @@ def get_user_data() -> bool:
     return False
 #st.title(key)
 with col2:
-    \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n
+    '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n'
     st.beta_expander(label='FFT explanation')
     st.beta_expander(label='STFT explanation')
 
