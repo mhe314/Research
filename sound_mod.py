@@ -423,7 +423,7 @@ if get_user_data(check1, check2, check3, check4):
     if check3: 
         with col1: 
             st.title('Features')
-            st.table(gen_guitar_feats)
+            st.dataframe(gen_guitar_feats)
     if check4: 
         with col1: 
             st.title('Plot of Features')
