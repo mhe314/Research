@@ -88,7 +88,7 @@ with col2:
     
     FFTbox = st.beta_expander(label='FFT explanation')
     with FFTbox: 
-        'This is the Fast Fourier Transform plot' 
+        'This is the Fast Fourier Transform plot. In Fast Fourier Transform, it uses sine curves to isolate the dominant frequency as well as the harmonics of the original audio signal. ' 
     
     st.markdown('##')
     st.markdown('##')
