@@ -159,7 +159,7 @@ with col2:
     
     GAudio = st.beta_expander(label='Generated Audio explanation')
     with GAudio: 
-        "Yay! We've generated a guitar sound! After uploading your piano key, going through feature extraction, then using the neural network to generate the predicted guitar features, these features are used to finally produce the generated guitar audio. Yay!" 
+        "Yay! We've generated a guitar sound! After uploading your piano key, going through feature extraction, then using the neural network to generate the predicted guitar features, these features are used to finally produce the generated guitar audio." 
 
 
 class MyDataset(Dataset):
