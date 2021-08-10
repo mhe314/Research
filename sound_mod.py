@@ -88,7 +88,7 @@ with col2:
     
     st.beta_expander(label='FFT explanation')
     
-     st.markdown('##')
+    st.markdown('##')
     st.markdown('##')
     st.markdown('##')
     st.markdown('##')
