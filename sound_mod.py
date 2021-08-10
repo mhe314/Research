@@ -88,8 +88,7 @@ with col2:
     
     FFTbox = st.beta_expander(label='FFT explanation')
     with FFTbox: 
-        'This is the Fast Fourier Transform plot. In Fast Fourier Transform, it uses sine curves to isolate the dominant frequency as well as the harmonics of the' 
-        'original audio signal. '
+        'This is the Fast Fourier Transform plot. In Fast Fourier Transform, it uses sine curves to isolate the dominant frequency as well as the harmonics of the original audio signal. '
     
     st.markdown('##')
     st.markdown('##')
@@ -136,7 +135,7 @@ with col2:
     
     FTable = st.beta_expander(label='Features Table explanation')
     with FTable: 
-        'Here are the resulting guitar features!'
+        'Here are the resulting guitar features! Once the 4 features displayed in the table were collected from the original audio input using FFT and STFT above, they were passed through a neural network which transformed the features the predicted guitar features displayed in the table. '
     
     st.markdown('##')
     st.markdown('##')
@@ -148,7 +147,7 @@ with col2:
     
     FPlot = st.beta_expander(label='Features Plot explanation')
     with FPlot: 
-        'Here we have a plot that compares the generated guitar features with the real sound featuers.'
+        'Here we have a plot that compares the generated guitar features with the real sound featuers. The predicted guitar features are compared with the real piano features and the real guitar features. From this overlay, it is clear that the neural network has been trained well, and the features generated are very close to what they should be!'
     
     st.markdown('##')
     st.markdown('##')
@@ -160,7 +159,7 @@ with col2:
     
     GAudio = st.beta_expander(label='Generated Audio explanation')
     with GAudio: 
-        "Yay! We've generated a guitar sound!" 
+        "Yay! We've generated a guitar sound! After uploading your piano key, going through feature extraction, then using the neural network to generate the predicted guitar features, these features are used to finally produce the generated guiitar audio. Yay!" 
 
 
 class MyDataset(Dataset):
