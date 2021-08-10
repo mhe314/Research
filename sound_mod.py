@@ -109,9 +109,6 @@ with col2:
     st.markdown('##')
     st.markdown('##')
     st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
     
     STFTbox = st.beta_expander(label='STFT explanation')
     with STFTbox:
