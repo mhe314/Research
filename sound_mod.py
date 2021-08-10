@@ -424,11 +424,9 @@ if get_user_data():
         st.title('Features')
         st.table(gen_guitar_feats)
 
-    with col1: 
         st.title('Plot of Features')
         st.pyplot()
-
-    with col1: 
+        
         st.title('Generated Audio')
         #st.audio('guitar/train/{}.wav'.format(key))
         #generated = SoundGenerator(path_dataset)
