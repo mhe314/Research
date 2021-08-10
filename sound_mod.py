@@ -140,6 +140,16 @@ with col2:
     st.markdown('##')
     
     st.beta_expander(label='Features Plot explanation')
+    
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    
+    st.beta_expander(label='Generated Audio explanation')
 
 
 class MyDataset(Dataset):
