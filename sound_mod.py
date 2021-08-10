@@ -130,6 +130,24 @@ with col2:
     st.markdown('##')
     
     st.beta_expander(label='Features Table explanation')
+    
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
+    
+    st.beta_expander(label='Features Plot explanation')
 
 
 class MyDataset(Dataset):
