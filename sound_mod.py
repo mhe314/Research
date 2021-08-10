@@ -127,13 +127,14 @@ with col2:
     st.markdown('##')
     st.markdown('##')
     st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
     
     FTable = st.beta_expander(label='Features Table explanation')
     with FTable: 
         'Here are the resulting guitar features! Once the 4 features displayed in the table were collected from the original audio input using FFT and STFT above, they were passed through a neural network which transformed the features the predicted guitar features displayed in the table. '
     
+    st.markdown('##')
+    st.markdown('##')
+    st.markdown('##')
     st.markdown('##')
     st.markdown('##')
     st.markdown('##')
