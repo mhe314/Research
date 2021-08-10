@@ -38,11 +38,11 @@ st.text('')
 st.text('')
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
-check1 = st.checkbox('Display Fast Fourier Transform Plot')
-check2 = st.checkbox('Display Short-time Fourier Transform Plot')
-check3 = st.checkbox('Display Features')
-check4 = st.checkbox('Display Plot of Features')
-check5 = st.checkbox('Display Generated Audio')
+# check1 = st.checkbox('Display Fast Fourier Transform Plot')
+# check2 = st.checkbox('Display Short-time Fourier Transform Plot')
+# check3 = st.checkbox('Display Features')
+# check4 = st.checkbox('Display Plot of Features')
+# check5 = st.checkbox('Display Generated Audio')
 global key
 key = 'A4'
 
@@ -50,7 +50,7 @@ key = 'A4'
 col1, col2 = st.beta_columns([5,4])
 
 # Grabbing sound file data
-def get_user_data(check1, check2, check3, check4) -> bool:
+def get_user_data() -> bool:
 
     with col1: 
         uploaded_file = st.file_uploader('Choose a sound file', accept_multiple_files=False)
@@ -63,7 +63,7 @@ def get_user_data(check1, check2, check3, check4) -> bool:
         #st.title(file)
         file = file[25:27]
         key = file.replace('.wav', '')
-        FeatureExtractor(uploaded_file, check1, check2, col1)
+        FeatureExtractor(uploaded_file, col1)
         return True
 
     return False
@@ -417,23 +417,21 @@ def guitar_feature_generator(path_dataset, key_name, plot: bool = True):
             return res
 
 
-if get_user_data(check1, check2, check3, check4):
+if get_user_data():
     # TODO: change the key name (currently it is "A4")
     gen_guitar_feats = pd.DataFrame(guitar_feature_generator(path_dataset, key))  # list of dictionaries: each with 4 dictionary keys
-    if check3: 
-        with col1: 
-            st.title('Features')
-            st.table(gen_guitar_feats)
-    if check4: 
-        with col1: 
-            st.title('Plot of Features')
-            st.pyplot()
-        
-    if check5:
-        with col1: 
-            st.title('Generated Audio')
-            #st.audio('guitar/train/{}.wav'.format(key))
-            #generated = SoundGenerator(path_dataset)
-            #st.audio(generated)
-            SoundGenerator("piano/train/{}.mat".format(key))
-            st.audio("piano/train/{}_generated.wav".format(key))
+    with col1: 
+        st.title('Features')
+        st.table(gen_guitar_feats)
+
+    with col1: 
+        st.title('Plot of Features')
+        st.pyplot()
+
+    with col1: 
+        st.title('Generated Audio')
+        #st.audio('guitar/train/{}.wav'.format(key))
+        #generated = SoundGenerator(path_dataset)
+        #st.audio(generated)
+        SoundGenerator("piano/train/{}.mat".format(key))
+        st.audio("piano/train/{}_generated.wav".format(key))
