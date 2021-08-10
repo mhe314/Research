@@ -419,7 +419,7 @@ def guitar_feature_generator(path_dataset, key_name, plot: bool = True):
 
 if get_user_data(check1, check2, check3, check4):
     # TODO: change the key name (currently it is "A4")
-    gen_guitar_feats = pd.DataFrame(guitar_feature_generator(path_dataset, key))   # list of dictionaries: each with 4 dictionary keys
+    gen_guitar_feats = pd.DataFrame(guitar_feature_generator(path_dataset, key))  # list of dictionaries: each with 4 dictionary keys
     if check3: 
         with col1: 
             st.title('Features')
