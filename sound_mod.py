@@ -139,8 +139,6 @@ with col2:
     st.markdown('##')
     st.markdown('##')
     st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
     
     FPlot = st.beta_expander(label='Features Plot explanation')
     with FPlot: 
