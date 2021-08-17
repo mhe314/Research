@@ -465,6 +465,9 @@ def guitar_feature_generator(path_dataset, key_name, plot: bool = True):
             }
             res_true.append(d_true)
             res.append(d)
+            mat_dic = {"a": pred_feats[0,:], "b": pred_feats[1,:], "phi": pred_feats[2,:], "omega": pred_feats[3,:]}
+            save_feature_path = 'pred_features.mat'
+            savemat(save_feature_path, mat_dic)
 
             # plot results
             if plot:
