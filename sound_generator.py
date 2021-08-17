@@ -8,7 +8,7 @@ from scipy.io.wavfile import write
 class SoundGenerator:
 
     def __init__(self, mat_file_path: str):
-        self.mat_file_path = mat_file_path  # this should be a .wav file
+        self.mat_file_path = mat_file_path  
 
         mat_dic = loadmat(self.mat_file_path)
 
