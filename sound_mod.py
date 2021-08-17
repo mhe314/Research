@@ -522,5 +522,6 @@ if get_user_data():
         #st.audio('guitar/train/{}.wav'.format(key))
         #generated = SoundGenerator(path_dataset)
         #st.audio(generated)
-        SoundGenerator('pred_features.mat', "piano/train/{}.mat".format(key))
+        #SoundGenerator("piano/train/{}.mat".format(key))
+        SoundGenerator('pred_features.mat')
         st.audio("piano/train/{}_generated.wav".format(key))
