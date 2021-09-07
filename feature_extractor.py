@@ -12,9 +12,8 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
 class FeatureExtractor:
-    def __init__(self, sound_file_path: str, col1):
-        
-
+    
+    def __init__(self, sound_file_path: str, three, five):
         self.sound_file_path = sound_file_path  # this should be a .wav file
 
         # Read sound file
@@ -39,15 +38,24 @@ class FeatureExtractor:
         xpos = np.argmax(X)
         xmax = f[xpos]
 
+        # Find fundamental frequencies
+        Index = np.argmax(X)
+        basic_f = round(f[Index])
+        TF = find_peaks(X, height=None, threshold=None, distance=round(Index))
+        TF = TF[0]
+        temp1 = f[TF]
+        self.omega = temp1[0:8]
 
-        with col1: 
+        x_limit = int(self.omega[7]+400)
+
+        with three: 
         # Plot FFT
             st.title('Fast Fourier Transform Plot')
             plt.title('Fast Fourier Transform')
             plt.ylabel('Magnitude')
             plt.xlabel('Frequency [Hz]')
             plt.plot(f, X)
-            xlim(0, 4000)  # Define x axis limitation in the figure
+            xlim(0, x_limit)  # Define x axis limitation in the figure
             plt.grid()
 #             plt.annotate('Dominant Frequency', xy=(525,265), xytext=(750, 320), arrowprops=dict(facecolor='black'),
 #             horizontalalignment='left')
@@ -58,23 +66,17 @@ class FeatureExtractor:
             plt.annotate('High Frequencies', xy=(xmax,ymax), xytext=(2100, 0.2*ymax), weight='bold')
             st.pyplot()
 
-        # Find fundamental frequencies
-        Index = np.argmax(X)
-        basic_f = round(f[Index])
-        TF = find_peaks(X, height=None, threshold=None, distance=round(Index))
-        TF = TF[0]
-        temp1 = f[TF]
-        self.omega = temp1[0:8]
+
 
         # short-time fourier transform
-        f, t, s = stft(y, Fs, window='boxcar', nperseg=2048 * 2, noverlap=None, nfft=None, detrend=False, return_onesided=True, );
+        f, t, s = stft(y, Fs, window='boxcar', nperseg=2048 * 2, noverlap=None, nfft=None, detrend=False, return_onesided=True, )
 
 
-        with col1: 
+        with five: 
             st.title('Short-time Fourier Transform Plot')
             f_plot = f[0:400]
             s_plot = np.log(np.abs(s[1:400, ]))
-            plt.pcolormesh(t, f_plot, s_plot)
+            plt.pcolormesh(t, f_plot, s_plot, shading="auto")
             plt.title('Short-time Fourier Transform Magnitude')
             plt.ylabel('Frequency [Hz]')
             plt.xlabel('Time [sec]')
