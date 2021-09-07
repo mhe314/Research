@@ -3,13 +3,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.io
+from scipy.io.matlab.mio import savemat
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 import streamlit as st
 import scipy.integrate
-from scipy.io import wavfile, loadmat, savemat
+from scipy.io import wavfile, loadmat
 import math
 from scipy.io.wavfile import write
 
@@ -17,17 +18,18 @@ from config import path_dataset, path_model
 from feature_extractor import FeatureExtractor
 from sound_generator import SoundGenerator
 
-# TODO: need melody_generator.py: uploaded to collab right now
 
 is_cuda = torch.cuda.is_available()
 device = torch.device('cuda' if is_cuda else 'cpu')
 
 st.set_page_config(layout="wide")
-st.title('Synthesizer')  # Title for streamlit app
-st.text('Welcome to the Sound Modification App')
+st.markdown("<h1 style='text-align: center;'>Sound Modification App</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>Made by James Fleming and Bradley Goedde</h1>", unsafe_allow_html=True)
+st.title('')
+st.header('Welcome to the Sound Modification App')
 st.text('In this app, the goal is to take your piano audio file as an input and using feature engineering transform it to a guitar sound!')
 st.text('Follow the steps below for how to use the app!')
-st.text('')
+st.text('') 
 st.header('Steps to use Synthesizer')
 st.text('1. Upload your piano key audio file (ex: A4.wav). You can hear the audio file you uploaded by pressing the play button on the audio bar. ')
 st.text('2. Below, the steps that are used to complete the sound transformation are displayed.')
@@ -38,127 +40,104 @@ st.text('')
 st.text('')
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
-# check1 = st.checkbox('Display Fast Fourier Transform Plot')
-# check2 = st.checkbox('Display Short-time Fourier Transform Plot')
-# check3 = st.checkbox('Display Features')
-# check4 = st.checkbox('Display Plot of Features')
-# check5 = st.checkbox('Display Generated Audio')
-global key
-key = 'A4'
-
-
-col1, col2 = st.beta_columns([5,4])
+# there needs to be 6 rows
+first, second, third = st.beta_columns([1, 10, 1])
+fourth, fifth, sixth = st.beta_columns([1, 10, 1])
+three, four = st.beta_columns([5, 4])
+five, six = st.beta_columns([5, 4])
+seven, eight = st.beta_columns([5, 4])
+nine, ten = st.beta_columns([5, 4])
+eleven, twelve = st.beta_columns([5, 4])
 
 # Grabbing sound file data
 def get_user_data() -> bool:
-
-    with col1: 
+    with second: 
         uploaded_file = st.file_uploader('Choose a sound file', accept_multiple_files=False)
 
     if uploaded_file:
         global key
-        with col1: 
+        with fifth: 
+            st.text('')
+            st.text('')
+            st.text('')
+            st.text('')
             st.audio(uploaded_file)
-        file = str(uploaded_file)
-        #st.title(file)
-        file = file[25:27]
+
+        file = uploaded_file.name
         key = file.replace('.wav', '')
-        FeatureExtractor(uploaded_file, col1)
+        
+        FeatureExtractor(uploaded_file, three, five)
         return True
 
     return False
-#st.title(key)
-with col2:
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    
-    FFTbox = st.beta_expander(label='FFT explanation')
+
+with four:
+    st.text('')
+    st.text('')
+    st.text('')
+    st.text('')
+    FFTbox = st.beta_expander(label='FFT note')
     with FFTbox: 
-        'This is the Fast Fourier Transform plot. In Fast Fourier Transform, it uses sine curves to isolate the dominant frequency as well as the harmonics of the original audio signal.'
-    
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    
-    STFTbox = st.beta_expander(label='STFT explanation')
+        """
+        Here is the Fast Fourier Transform graph. By using sin waves, FFT makes it easier to see the dominant frequency and its harmonics. 
+        These frequenices are collected and will be used as the "frequency feature" and the amplitudes for these frequencies are collected and will be used as the "a feature".
+        Then using a simple wave equation, the phase angle can be collected and used as the "phi feature".
+        These important features will be used later on to process the signal using the neural network.
+        """
+
+with six:    
+    st.text('')
+    st.text('')
+    st.text('')
+    st.text('')
+    STFTbox = st.beta_expander(label='STFT note')
     with STFTbox:
-        'This is the plot for the Short Time Fourier Transformation. Similar to the Fast Fourier Transform, this plot uses sin curves '
-    
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    
-    FTable = st.beta_expander(label='Features Table explanation')
+        """
+        Similarly to the Fast Fourier Transform above, the Short Time Fourier Transform graph here uses sin waves to gather important information from the signal.
+        Using a heat map and time on the x-axis, we can see how the damping coefficient changes with frequency. 
+        The darker the color the larger the damping coefficient (the more negative).
+        """
+
+with eight:
+    st.text('')
+    st.text('')
+    st.text('')
+    st.text('')    
+    FTable = st.beta_expander(label='Features Table note')
     with FTable: 
-        'Here are the resulting guitar features! Once the 4 features displayed in the table were collected from the original audio input using FFT and STFT above, they were passed through a neural network which transformed the features the predicted guitar features displayed in the table. '
-    
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    
-    FPlot = st.beta_expander(label='Features Plot explanation')
+        """
+        Here are the resulting guitar features!
+        Once the 4 features displayed in the table were collected from the original audio input using FFT and STFT above, they were passed through a neural network which transformed the features the predicted guitar features displayed in the table.
+        """
+
+with ten:  
+    st.text('')
+    st.text('')
+    st.text('')
+    st.text('')  
+    FPlot = st.beta_expander(label='Features Plot note')
     with FPlot: 
-        'Here we have a plot that compares the generated guitar features with the real sound featuers. The predicted guitar features are compared with the real piano features and the real guitar features. From this overlay, it is clear that the neural network has been trained well, and the features generated are very close to what they should be!'
-    
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    st.markdown('##')
-    
-    GAudio = st.beta_expander(label='Generated Audio explanation')
+        """
+        Here we have a plot that compares the generated guitar features with the real sound featuers. 
+        The predicted guitar features are compared with the real piano features and the real guitar features. 
+        From this overlay, it is clear that the neural network has been trained well, and the features generated are very close to what they should be!
+        """
+
+with twelve: 
+    st.text('')
+    st.text('')
+    st.text('')
+    st.text('')   
+    GAudio = st.beta_expander(label='Generated Audio note')
     with GAudio: 
-        "Yay! We've generated a guitar sound! After uploading your piano key, going through feature extraction, then using the neural network to generate the predicted guitar features, these features are used to finally produce the generated guitar audio." 
+        """
+        Yay! We've generated a guitar sound! After uploading your piano key, going through feature extraction, 
+        then using the neural network to generate the predicted guitar features, these features are used to finally produce the generated guitar audio.
+        """
 
 
 class MyDataset(Dataset):
+
     """Dataset for MDS method"""
 
     def __init__(self, path_dataset, data_type):
@@ -182,7 +161,6 @@ class MyDataset(Dataset):
 
         self.guitar_list = self.parse_guitar_list()
 
-        print(self.piano_list)
 
         # without normalization
         self.feats_all_p = self.wrap_data(self.piano_list)  # all piano features
@@ -288,9 +266,8 @@ class MyDataset(Dataset):
 
 
 class SimpleNet(nn.Module):
-    """
-    This is your FFNN model.
-    """
+
+    """ This is your FFNN model """
 
     def __init__(self, input_dim, output_dim):
         """
@@ -313,7 +290,8 @@ class SimpleNet(nn.Module):
 
 
 class Configer:
-    """Parameters for training"""
+    
+    """ Parameters for training """
     epoch = 5000
     batch_size = 4
     lr = 0.001
@@ -322,6 +300,153 @@ class Configer:
 
     def __init__(self):
         super(Configer, self).__init__()
+
+
+def guitar_feature_generator(path_dataset, key_name, plot: bool = True):
+    """Generate predicted guitar features from piano features
+
+    Args:
+        dataset_path: [String] folder to save dataset, please name it as "dataset";
+        key_name: [String] key name that you want to generate. Example: "A4"
+
+    Returns:
+        gen_guitar_feats: [List] contains predicted guitar features in a dict,
+                          note that this part can be used to generate many guitar features,
+                          so we use a list to store the guitar features.
+    """
+
+    config = Configer()
+    net = SimpleNet(config.p_length, config.g_length)
+    net.to(device)
+    net.load_state_dict(torch.load(path_model, map_location=torch.device('cpu')))
+    net.eval()
+
+    dataset_train = MyDataset(path_dataset, 'train')
+    train_loader = DataLoader(dataset_train, batch_size=config.batch_size, shuffle=True)
+
+    for step, (inputs, targets, key_names) in enumerate(train_loader):
+        inputs = inputs.to(device)
+        targets = targets.to(device)
+        inputs = inputs.reshape(inputs.shape[0], 4, -1)
+        targets = targets.reshape(inputs.shape[0], 4, -1)
+        outputs = net(inputs)
+
+        gen_feats_batch = outputs.detach().cpu().numpy()
+        targets_batch = targets.detach().cpu().numpy()
+        inputs_batch = inputs.detach().cpu().numpy()
+
+        for i in range(gen_feats_batch.shape[0]):
+            if key_names[i] != key_name:
+                st.title(('key name[i]:', key_names[i], 'key name:', key_name))
+                continue
+
+            pred_feats_norm = gen_feats_batch[i].reshape(4, 8)
+
+            # inverse data to original range
+            pred_feats = dataset_train.inverse_guitar(pred_feats_norm)
+            #st.title(pred_feats[0, :3])
+            #scipy.io.savemat('A4_generated.mat', pred_feats)
+            true_feats_norm = targets_batch[i].reshape(4, 8)
+            true_feats = dataset_train.inverse_guitar(true_feats_norm)
+            #st.title(true_feats[0, :3])
+            inputs_feats_norm = inputs_batch[i].reshape(4, 8)
+            inputs_feats = dataset_train.inverse_piano(inputs_feats_norm)
+
+            d = {
+                'Key': key_names[i],
+                'omega': pred_feats[0, :],
+                'phi': pred_feats[1, :],
+                'a': pred_feats[2, :],
+                'b': pred_feats[3, :],
+            }
+            d_true = {
+                'Key': key_names[i],
+                'Frequency [Hz]': true_feats[0, :],
+                'Phi [radians]': true_feats[1, :],
+                'Amplitude (a)': true_feats[2, :],
+                'Damping Coefficient (b)': true_feats[3, :],
+            }
+
+            # x_limit = d_true['Frequency [Hz]'][7] + 500
+
+            # plot results
+            if plot:
+                #st.title('About to plot')  # Title for streamlit app
+                fig = plt.figure(figsize=(12, 5))
+                # st.pyplot(fig)
+                ax1 = fig.add_subplot(1, 2, 1)
+                lns1 = plt.plot(pred_feats[0, :], pred_feats[2, :], '^', label='Prediction (G)')
+                lns2 = plt.plot(true_feats[0, :], true_feats[2, :], 'v', label='Ground Truth (G)')
+                plt.xlabel('Frequency [Hz]', fontsize=16)
+                plt.ylabel('Amplitude, a', fontsize=16)
+                ax2 = ax1.twinx()
+                lns3 = plt.plot(inputs_feats[0, :], inputs_feats[2, :], 'o', c='g', label='Ground Truth (P)')
+                lns = lns1 + lns2 + lns3
+                labs = [l.get_label() for l in lns]
+                ax1.legend(lns, labs, loc=0, fontsize=14)
+                plt.title('Key: ' + key_names[i], fontsize=18)
+
+                ax3 = fig.add_subplot(1, 2, 2)
+                lns1 = plt.plot(pred_feats[1, :], pred_feats[3, :], '^', label='Prediction (G)')
+                lns2 = plt.plot(true_feats[1, :], true_feats[3, :], 'v', label='Ground Truth (G)')
+                plt.xlabel('Phase Angle [radians]', fontsize=16)
+                plt.ylabel('Damping Coefficient, $b_i$', fontsize=16)
+                ax4 = ax3.twinx()
+                lns3 = plt.plot(inputs_feats[1, :], inputs_feats[3, :], 'o', c='g', label='Ground Truth (P)')
+                lns = lns1 + lns2 + lns3
+                labs = [l.get_label() for l in lns]
+                ax3.legend(lns, labs, loc=0, fontsize=14)
+                plt.title('Key: ' + key_names[i], fontsize=18)
+
+                plt.tight_layout()
+                
+                #st.pyplot()
+                #st.title('Plotted')  # Title for streamlit app
+
+                # plt.savefig(f'results/MDS_pred_{key_names[i]}.jpg', doi=300)
+
+            return d
+
+
+if get_user_data():
+    gen_guitar_feats = guitar_feature_generator(path_dataset, key)
+    
+    with seven: 
+        st.title('Features')
+        del gen_guitar_feats['Key']
+        savemat("piano/generate/{}_generated.mat".format(key), gen_guitar_feats)
+        st.header("Key: {}".format(key))
+        st.table(gen_guitar_feats)
+
+        # Key: A4
+        # +------------------------------------------------------------------------------------+
+        # |     |   Frequency [Hz]   |   Phi [Radians]   |   Amplitude (a)   |   Damping (b)   | 
+        # +------------------------------------------------------------------------------------+
+        # |  1  |   number           |   number          |   number          |   number        | 
+        # +------------------------------------------------------------------------------------+
+        # |  2  |   number           |   number          |   number          |   number        | 
+        # +------------------------------------------------------------------------------------+
+        # |  3  |   number           |   number          |   number          |   number        | 
+        # +------------------------------------------------------------------------------------+
+        # |  4  |   number           |   number          |   number          |   number        | 
+        # +------------------------------------------------------------------------------------+
+        # |  5  |   number           |   number          |   number          |   number        | 
+        # +------------------------------------------------------------------------------------+
+        # |  6  |   number           |   number          |   number          |   number        | 
+        # +------------------------------------------------------------------------------------+
+        # |  7  |   number           |   number          |   number          |   number        | 
+        # +------------------------------------------------------------------------------------+
+        # |  8  |   number           |   number          |   number          |   number        | 
+        # +------------------------------------------------------------------------------------+
+
+    with nine:
+        st.title('Plot of Features')
+        st.pyplot()
+        
+    with eleven:
+        st.title('Generated Audio')
+        SoundGenerator("piano/train/{}.mat".format(key), "piano/generate/{}_generated.mat".format(key))
+        st.audio("piano/generate/{}_generated.wav".format(key))
 
 
 # def model_trainer(path_dataset):
@@ -395,133 +520,3 @@ class Configer:
 #     #plt.savefig('results-MDS/MDS_loss.jpg', doi=300)
 
 # model_trainer(path_dataset)
-
-
-
-def guitar_feature_generator(path_dataset, key_name, plot: bool = True):
-    """Generate predicted guitar features from piano features
-
-    Args:
-        dataset_path: [String] folder to save dataset, please name it as "dataset";
-        key_name: [String] key name that you want to generate. Example: "A4"
-
-    Returns:
-        gen_guitar_feats: [List] contains predicted guitar features in a dict,
-                          note that this part can be used to generate many guitar features,
-                          so we use a list to store the guitar features.
-    """
-
-    config = Configer()
-    net = SimpleNet(config.p_length, config.g_length)
-    net.to(device)
-    net.load_state_dict(torch.load(path_model, map_location=torch.device('cpu')))
-    net.eval()
-
-    res, res_true = [], []
-    dataset_train = MyDataset(path_dataset, 'train')
-    train_loader = DataLoader(dataset_train, batch_size=config.batch_size, shuffle=True)
-
-    for step, (inputs, targets, key_names) in enumerate(train_loader):
-        inputs = inputs.to(device)
-        targets = targets.to(device)
-        inputs = inputs.reshape(inputs.shape[0], 4, -1)
-        targets = targets.reshape(inputs.shape[0], 4, -1)
-        outputs = net(inputs)
-
-        gen_feats_batch = outputs.detach().cpu().numpy()
-        targets_batch = targets.detach().cpu().numpy()
-        inputs_batch = inputs.detach().cpu().numpy()
-
-        for i in range(gen_feats_batch.shape[0]):
-            if key_names[i] != key_name:
-                st.title(('key name[i]:', key_names[i], 'key name:', key_name))
-                continue
-
-            pred_feats_norm = gen_feats_batch[i].reshape(4, 8)
-
-            # inverse data to original range
-            pred_feats = dataset_train.inverse_guitar(pred_feats_norm)
-            #st.title(pred_feats[0, :3])
-            #scipy.io.savemat('A4_generated.mat', pred_feats)
-            true_feats_norm = targets_batch[i].reshape(4, 8)
-            true_feats = dataset_train.inverse_guitar(true_feats_norm)
-            #st.title(true_feats[0, :3])
-            inputs_feats_norm = inputs_batch[i].reshape(4, 8)
-            inputs_feats = dataset_train.inverse_piano(inputs_feats_norm)
-
-            d = {
-                'Key': key_names[i],
-                'Frequency [Hz]': pred_feats[0, :],
-                'Phi [radians]': pred_feats[1, :],
-                'Amplitude (a)': pred_feats[2, :],
-                'Damping Coefficient (b)': pred_feats[3, :],
-            }
-            d_true = {
-                'Key': key_names[i],
-                'Frequency [Hz]': true_feats[0, :],
-                'Phi [radians]': true_feats[1, :],
-                'Amplitude (a)': true_feats[2, :],
-                'Damping Coefficient (b)': true_feats[3, :],
-            }
-            res_true.append(d_true)
-            res.append(d)
-            mat_dic = {"a": pred_feats[0,:], "b": pred_feats[1,:], "phi": pred_feats[2,:], "omega": pred_feats[3,:]}
-            save_feature_path = 'pred_features.mat'
-            savemat(save_feature_path, mat_dic)
-
-            # plot results
-            if plot:
-                #st.title('About to plot')  # Title for streamlit app
-                fig = plt.figure(figsize=(12, 5))
-                # st.pyplot(fig)
-                ax1 = fig.add_subplot(1, 2, 1)
-                lns1 = plt.plot(pred_feats[0, :], pred_feats[2, :], '^', label='Prediction (G)')
-                lns2 = plt.plot(true_feats[0, :], true_feats[2, :], 'v', label='Ground Truth (G)')
-                plt.xlabel('Frequency [Hz]', fontsize=16)
-                plt.ylabel('Amplitude, a', fontsize=16)
-                ax2 = ax1.twinx()
-                lns3 = plt.plot(inputs_feats[0, :], inputs_feats[2, :], 'o', c='g', label='Ground Truth (P)')
-                lns = lns1 + lns2 + lns3
-                labs = [l.get_label() for l in lns]
-                ax1.legend(lns, labs, loc=0, fontsize=14)
-                plt.title('Key: ' + key_names[i], fontsize=18)
-
-                ax3 = fig.add_subplot(1, 2, 2)
-                lns1 = plt.plot(pred_feats[1, :], pred_feats[3, :], '^', label='Prediction (G)')
-                lns2 = plt.plot(true_feats[1, :], true_feats[3, :], 'v', label='Ground Truth (G)')
-                plt.xlabel('Phase Angle [radians]', fontsize=16)
-                plt.ylabel('Damping Coefficient, $b_i$', fontsize=16)
-                ax4 = ax3.twinx()
-                lns3 = plt.plot(inputs_feats[1, :], inputs_feats[3, :], 'o', c='g', label='Ground Truth (P)')
-                lns = lns1 + lns2 + lns3
-                labs = [l.get_label() for l in lns]
-                ax3.legend(lns, labs, loc=0, fontsize=14)
-                plt.title('Key: ' + key_names[i], fontsize=18)
-
-                plt.tight_layout()
-                plt.show()
-                #st.pyplot()
-                #st.title('Plotted')  # Title for streamlit app
-
-                # plt.savefig(f'results/MDS_pred_{key_names[i]}.jpg', doi=300)
-
-            return res
-
-
-if get_user_data():
-    # TODO: change the key name (currently it is "A4")
-    gen_guitar_feats = pd.DataFrame(guitar_feature_generator(path_dataset, key))  # list of dictionaries: each with 4 dictionary keys
-    with col1: 
-        st.title('Features')
-        st.table(gen_guitar_feats)
-
-        st.title('Plot of Features')
-        st.pyplot()
-        
-        st.title('Generated Audio')
-        #st.audio('guitar/train/{}.wav'.format(key))
-        #generated = SoundGenerator(path_dataset)
-        #st.audio(generated)
-        #SoundGenerator("piano/train/{}.mat".format(key))
-        SoundGenerator('pred_features.mat')
-        st.audio("piano/train/{}_generated.wav".format(key))
