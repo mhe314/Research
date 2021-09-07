@@ -1,4 +1,5 @@
 import numpy as np
+from numpy.lib.twodim_base import triu
 import scipy.integrate
 from scipy.io import wavfile, loadmat
 import math
@@ -7,15 +8,16 @@ from scipy.io.wavfile import write
 
 class SoundGenerator:
 
-    def __init__(self, mat_file_path: str):
-        self.mat_file_path = mat_file_path  
+    def __init__(self, mat_file_path: str, gen_mat_file_path: str):
+        self.mat_file_path     = mat_file_path
+        self.gen_mat_file_path = gen_mat_file_path
 
-        mat_dic = loadmat(self.mat_file_path)
+        gen_mat_dic = loadmat(self.gen_mat_file_path)
 
-        self.a = mat_dic['a']
-        self.b = mat_dic['b']
-        self.phi = mat_dic['phi']
-        self.omega = mat_dic['omega']
+        self.a = gen_mat_dic['a']
+        self.b = gen_mat_dic['b']
+        self.phi = gen_mat_dic['phi']
+        self.omega = gen_mat_dic['omega']
 
         # Read sound file, know the length
         sound_file_path = self.mat_file_path.replace('mat', 'wav')
@@ -33,4 +35,4 @@ class SoundGenerator:
 
         scaled = np.int16(y_new / np.max(np.abs(y_new)) * 32767)
 
-        write(self.mat_file_path.replace('.mat', '') + '_generated.wav', Fs, scaled)
+        write(self.gen_mat_file_path.replace('mat', 'wav'), Fs, scaled)
